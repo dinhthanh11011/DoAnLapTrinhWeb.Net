@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/_Layout.cshtml";
+}
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Phân Quyền Loại Tài Khoản</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body text-center" id="tb_list">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        const route = "api/admin_permissions/"
+        loadDataTable()
+
+        function loadDataTable() {
+            $.ajax({
+                url: route,
+                method: "GET"
+            }).done((data) => {
+                $("#tb_list table").remove()
+                $("#tb_list").append(
+                    createPermissionTable(data.Permissions, data.AccountPermissions)
+                )
+            }).fail(() => sendMessage("Load dữ liệu thất bại!"))
+        }
+
+        $(document).on("click", ".account_manager,.product_manager,.store_manager", (e) => {
+            e.preventDefault()
+            let tar = $(e.currentTarget)
+            let Action = 'active'
+            if (tar.text() == "true") {
+                Action = 'inactive'
+            }
+            let Target = 'account_manager'
+            if (tar.hasClass('product_manager')) {
+                Target = 'product_manager'
+            } else if (tar.hasClass('store_manager')) {
+                Target = 'store_manager'
+            }
+            putOne(tar.attr("value"), {
+                Action: Action,
+                Id: tar.attr("value"),
+                Target: Target
+            }, route).done((data) => {
+                    loadDataTable()
+                sendMessage("Đã lưu thay đổi!", "done")
+                changeBackgroundBoolOne(tar)
+            })
+                .fail((err) => sendMessage(err.responseJSON.Message, "fail"))
+        })
+
+
+
+        function createPermissionTable(arrPermissions, arrAccountPermissions) {
+            let html =
+                `
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Loại Tài Khoản</th>`
+            arrPermissions.forEach(item => {
+                html += `<th>${item.Name}</th>`
+            })
+            html += `
+                    </tr>
+                </thead>
+                <tbody>`
+            arrAccountPermissions.forEach((item, index) => {
+                html +=
+                    `<tr>
+                        <td>${++index}</td>
+                        <td>${item.Name}</td>`
+                arrPermissions.forEach(item2 => {
+                    let color = 'secondary'
+                    let value = false
+                    item.Permissions.forEach(item3 => {
+                        if (item3.Id == item2.Id) {
+                            color = 'success'
+                            value = true
+                        }
+                    });
+                    html += `<td><a href='' value='${item.Id}' style="padding:5px; width:80px;" class="badge badge-${color} ${item2.Name}">${value}</a></td>`
+                })
+                html+=
+                    `</tr>`
+            })
+
+            html +=`</tbody >
+            </table >`
+            return html;
+        }
+    })
+
+</script>
+

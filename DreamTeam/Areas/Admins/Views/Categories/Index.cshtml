@@ -1,0 +1,189 @@
+﻿@model IEnumerable<DreamTeam.Models.Product.Category>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/_Layout.cshtml";
+}
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thêm Mới</h3>
+    </div>
+    <form id="form_post" enctype="multipart/form-data">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="BrandId">Thương Hiệu</label>
+                @Html.DropDownList("BrandId", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label for="Name">Tên Loại Sản Phẩm</label>
+                <input  type="text" name="Name" class="form-control" id="Name" placeholder="Tên Loại Sản Phẩm">
+            </div>
+
+            <div class="form-group my-2">
+                <label for="Avatar">Avatar</label>
+                <input  type="file" accept="image/*" name="Avatar" class="form-control-file" id="Avatar">
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Loại sản phẩm</h3>
+    </div>
+    <div class="card-body" id="tb_list">
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(() => {
+        const route = "api/admin_Categories/"
+        let arrBrands = getBrands()
+        loadDataTable()
+
+
+        function getBrands() {
+            return JSON.parse($.ajax({
+                url: "api/admin_Brands",
+                method: "GET",
+                async: false
+            }).responseText)
+        }
+
+        $("#form_post").on("submit", (e) => {
+            e.preventDefault()
+            $.ajax({
+                url: route,
+                method: "POST",
+                data: new FormData($(e.target)[0]),
+                processData: false,
+                contentType: false,
+            }).done(() => {
+                sendMessage("Đã thêm mới thành công!", "done")
+                loadDataTable()
+            })
+                .fail((err) => {
+                    console.log(err.responseText)
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+        })
+
+
+        function loadDataTable() {
+            $.ajax({
+                url: route,
+                method: "GET"
+            }).done(data => {
+                data.forEach(item => {
+                    item.Avatar = `
+                                <div class="form-group">
+                                    <input type="file" class="form-control-file Avatar ${item.Id}" value="${item.Id}" accept="image/*">
+                                    <div class="text-center border my-1">
+                                        <img src="/uploads/${item.Avatar}" width="100px" class="rounded" alt="${item.Avatar}">
+                                    </div>
+                                </div>
+                                `
+                })
+                $("#tb_list table").remove()
+                $("#tb_list").append(
+                    createTable(data,
+                        ["Thương Hiệu", "Tên", "Avatar", "Active", "Ordering"],
+                        [
+                            ["Brand", 4, arrBrands],
+                            ["Name", 3],
+                            ["Avatar", 1],
+                            ["Active", 2],
+                            ["Ordering", 3],
+                        ],true,false,true)
+                )
+            }).fail((err) => {
+                console.log(err.responseText)
+                sendMessage("Thêm mới thất bại!", "fail")
+            })
+        }
+
+        $(document).on("click", ".Active", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), { Active: !(tar.text() == "true") }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                changeBackgroundBoolOne(tar)
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        });
+
+        $(document).on("click", ".btn_save", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), {
+                Name: $(`.Name.${tar.attr("value")}`).val(),
+                Ordering: $(`.Ordering.${tar.attr("value")}`).val(),
+            }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadDataTable()
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        });
+
+        $(document).on("click", ".btn_delete", (e) => {
+            e.preventDefault();
+            if (confirm("Tiếp tục xóa?")) {
+                let tar = $(e.currentTarget);
+                $.ajax({
+                    url: route + tar.attr("value"),
+                    method: "DELETE",
+                }).done(() => {
+                    sendMessage("Đã xóa!", "done")
+                    loadDataTable()
+                }).fail(() => {
+                    sendMessage("Không thể xóa vì lý do an toàn dữ liệu!", "fail")
+                })
+            }
+        });
+
+        $(document).on("change", ".Avatar", (e) => {
+            e.preventDefault();
+            let tar = $(e.target);
+            let data = new FormData()
+            data.append("Avatar", e.target.files[0])
+            data.append("Id", tar.attr("value"))
+            $.ajax({
+                url: route,
+                method: "PUT",
+                data: data,
+                processData: false,
+                contentType: false
+            }).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadDataTable()
+            }).fail((err) => {
+                console.log(err.responseJSON)
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        });
+
+        $(document).on("change", ".Brand", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), {
+                BrandId: $(e.target).val()
+            }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadDataTable()
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        });
+    })
+</script>

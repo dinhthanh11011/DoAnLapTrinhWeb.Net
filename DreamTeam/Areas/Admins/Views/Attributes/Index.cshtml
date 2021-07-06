@@ -1,0 +1,47 @@
+﻿@model IEnumerable<DreamTeam.Models.Product.Attribute>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/_Layout.cshtml";
+}
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Loại Sản Phẩm</h3>
+    </div>
+
+    <div class="card-body" id="tb_list">
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        const route = ""
+        loadDataTable()
+
+        function loadDataTable() {
+            $.ajax({
+                url: "api/admin_categories",
+                method: "GET"
+            }).done((data) => {
+                $("#tb_list table").remove()
+                $("#tb_list").append(
+                    createTable(data,
+                        ["Thương Hiệu", "Tên Loại", "Số Thuộc Tính"],
+                        [
+                            ["Brand", 1],
+                            ["Name", 1],
+                            ["AttributeCount", 1],
+                        ],false,true,false)
+                )
+            }).fail(() => sendMessage("Load dữ liệu thất bại!"))
+        }
+
+
+        $(document).on("click", ".btn_detail", (e) => {
+            window.location = window.location.href + "/Details/" + $(e.currentTarget).attr("value")
+        })
+    })
+</script>
+
