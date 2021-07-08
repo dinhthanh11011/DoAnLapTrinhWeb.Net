@@ -1,0 +1,185 @@
+﻿@model IEnumerable<DreamTeam.Models.Product.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/_Layout.cshtml";
+}
+
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thêm Mới</h3>
+    </div>
+    <form id="form_post" enctype="multipart/form-data">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label for="CategoryId">Loại Sản Phẩm</label>
+                @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control col" })
+            </div>
+
+            <div class="form-group">
+                <label for="NAME_post">Tên Sản Phẩm</label>
+                <input type="text" required name="Name" class="form-control" id="NAME_post" placeholder="Tên Sản Phẩm">
+            </div>
+
+            <div class="form-group">
+                <label for="QUANTITY_post">Số Lượng</label>
+                <input type="number" required name="Quantity" class="form-control" id="QUANTITY_post" placeholder="Số Lượng">
+            </div>
+
+            <div class="form-group">
+                <label for="PRICE_post">Giá Gốc</label>
+                <input type="number" required name="OldPrice" class="form-control" id="PRICE_post" placeholder="Giá Gốc">
+            </div>
+
+            <div class="form-group">
+                <label for="DISCOUNTPRICE_post">Giá Bán Ra</label>
+                <input type="number" required name="CurrentPrice" class="form-control" id="DISCOUNTPRICE_post" placeholder="Giá Bán Ra">
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Sản Phẩm</h3>
+    </div>
+
+    <div class="card-body" id="tb_list">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        const route = "api/admin_Products/"
+        let arr_cate = getCategories()
+        loadDataTable()
+
+        console.log(arr_cate)
+
+        function loadDataTable() {
+            $.ajax({
+                url: route,
+                method: "GET",
+                async: false
+            }).done(data => {
+                $("#tb_list table").remove()
+                $("#tb_list").append(
+                    createTable(data,
+                        ["Thương Hiệu", "Loại SP", "Tên", "Giá Gốc", "Giá Bán", "Active", "Ordering"],
+                        [
+                            ["Brand", 1],
+                            ["Category", 4, arr_cate],
+                            ["Name", 3],
+                            ["OldPrice", 3],
+                            ["CurrentPrice", 3],
+                            ["Active", 2],
+                            ["Ordering", 3],
+                        ], true, true, true)
+                )
+            }).fail((err) => {
+                console.log(err.responseText)
+                sendMessage("Load đữ liệu thất bại!", "fail")
+            })
+        }
+
+        function getCategories() {
+            return JSON.parse(
+                $.ajax({
+                    url: "api/admin_categories",
+                    method: "GET",
+                    async: false
+                }).responseText
+            )
+        }
+
+
+        $("#form_post").on("submit", (e) => {
+            e.preventDefault()
+            $.ajax({
+                url: route,
+                method: "POST",
+                data: JSON.stringify($("#form_post").serializeFormJSON()),
+                processData: false,
+                contentType: "application/json",
+            }).done((data) => {
+                loadDataTable()
+                sendMessage("Đã thêm mới thành công!", "done")
+            })
+                .fail((err) => {
+                    console.log(err.responseText)
+                    sendMessage("Thêm mới thất bại!", "fail")
+                })
+        })
+
+        $(document).on("click", ".btn_save", (e) => {
+            e.preventDefault()
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), {
+                Name: $(`.Name.${tar.attr("value")}`).val(),
+                Ordering: $(`.Ordering.${tar.attr("value")}`).val(),
+                OldPrice: $(`.OldPrice.${tar.attr("value")}`).val(),
+                CurrentPrice: $(`.CurrentPrice.${tar.attr("value")}`).val(),
+                CategoryId: $(`.Category.${tar.attr("value")}`).val(),
+            }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadDataTable()
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        })
+
+        $(document).on("click", ".btn_delete", (e) => {
+            e.preventDefault()
+            if (confirm("Tiếp tục xóa?")) {
+                let tar = $(e.currentTarget);
+                $.ajax({
+                    url: route + tar.attr("value"),
+                    method: "DELETE"
+                }).done(() => {
+                    sendMessage("Đã lưu thay đổi!", "done")
+                    loadDataTable()
+                }).fail(() => {
+                    sendMessage("Vui lòng thử lại sau!", "fail")
+                })
+            }
+        })
+
+        $(document).on("click", ".btn_detail", (e) => {
+            e.preventDefault()
+            let tar = $(e.currentTarget);
+            window.location = window.location.href + `/Details/${tar.attr("value")}`
+        })
+
+        $(document).on("click", ".Active", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), { Active: !(tar.text() == "true") }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                changeBackgroundBoolOne(tar)
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        });
+
+
+        $(document).on("change", ".Category", (e) => {
+            let tar = $(e.currentTarget);
+            arr_cate.forEach(item => {
+                if (item.ID == tar.val()) {
+                    $(`.Brand.${tar.attr("value")}`).html(item.BRAND)
+                }
+            })
+        })
+
+    })
+</script>
+
+

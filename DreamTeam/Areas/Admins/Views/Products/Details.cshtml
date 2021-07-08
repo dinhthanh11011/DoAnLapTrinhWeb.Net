@@ -1,0 +1,174 @@
+﻿@model DreamTeam.Models.Product.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admins/Views/_Layout.cshtml";
+}
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thêm Mới</h3>
+    </div>
+    <form id="form_put" data-product-id="@Model.Id">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="card-body">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Category.Name, null, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OldPrice, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.OldPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.OldPrice, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CurrentPrice, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.CurrentPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CurrentPrice, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Active)
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Ordering, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Ordering, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ordering, "", new { @class = "text-danger" })
+                </div>
+                <div class="card-footer">
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thông Tin Thuộc Tính</h3>
+    </div>
+
+    <form id="form_attributes_put">
+        <div class="card-body" id="form_attributes">
+
+        </div>
+        <div class="card-footer">
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Hình Ảnh Sản Phẩm</h3>
+    </div>
+
+    <div class="card card-primary m-2">
+
+        <form id="form_imgs_post" enctype="multipart/form-data">
+            <input type="text" required value="@Model.ID" name="PRODUCT_ID" hidden>
+
+            <div class="card-body">
+                <div class="form-group my-2">
+                    <label for="IMAGES_post">Thêm Mới Hình Ảnh</label>
+                    <input type="file" required accept="image/*" name="IMAGES" class="form-control-file" multiple id="IMAGES_post">
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body" id="form_imgs">
+
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            let route_pro = "api/admin_products/"
+            let route_pro_img = "api/admin_product_imgs/"
+            let route_pro_attr = "api/admin_Product_Attributes/"
+
+
+            $("#form_put").submit((e) => {
+                e.preventDefault()
+                let tar = $(e.target)
+                let data = tar.serializeFormJSON()
+                if (data.Active[0] == "true") {
+                    data.Active = true
+                }
+                putOne(tar.attr("data-product-id"),
+                    data
+                    , route_pro).done(() => {
+                        sendMessage("Đã lưu thay đổi!", "done")
+                        loadDataTable()
+                    }).fail(() => {
+                        sendMessage("Vui lòng thử lại sau!", "fail")
+                    })
+            })
+
+            function loadPro_Imgs() {
+            $.ajax({
+                url: route_pro_img + @Model.ID,
+                method: "GET",
+                async: false
+            }).done(data => {
+                $("#form_imgs table").remove()
+                data.forEach((item) => {
+                    item.NAME = `<img width=100px class="image m-auto" src="/uploads/${item.NAME}" alt="${item.NAME}" />`
+                })
+                $("#form_imgs").append(
+                    createTable(
+                        data,
+                        ["Hình Ảnh", "Active", "Ordering"],
+                        [
+                            ["NAME", 1],
+                            ["ACTIVE", 2],
+                            ["ORDERING",3]
+                        ],
+                        true, false,true
+                    )
+                )
+
+            })
+                .fail(() => {
+                    loadPro_Imgs()
+                })
+            }
+
+        })
+    </script>
+}

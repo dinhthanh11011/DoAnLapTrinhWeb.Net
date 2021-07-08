@@ -73,11 +73,10 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                     var fileUp = support.uploadFile(file);
                     int id = int.Parse(HttpContext.Current.Request.Form.Get("Id"));
                     var ob = db.Brands.Find(id);
-                    string oldfi = ob.Logo;
+                    support.deleteImg(ob.Logo);
                     ob.Logo = fileUp.fileName;
                     db.SaveChanges();
                     file.SaveAs(fileUp.path);
-                    support.deleteImg(oldfi);
                     return Ok("Đã lưu thay đổi!");
                 }
                 return BadRequest("Thất bại!");
