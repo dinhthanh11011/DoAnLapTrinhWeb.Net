@@ -19,8 +19,18 @@
 
             <div class="card-body">
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Category.Name, null, htmlAttributes: new { @class = "control-label" })
-                    @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+                    <label for="CategoryId">Loại Sản Phẩm</label>
+                    <select required name="CategoryId" class="form-control" id="CategoryId">
+                        @foreach (var item in @ViewBag.Categories)
+                        {
+                            string selected = "";
+                            if (@item.GetType().GetProperty("Id").GetValue(@item, null) == Model.CategoryId)
+                            {
+                                selected = "selected";
+                            }
+                            <option @selected value="@item.Id">@item.Name ( @item.Brand.Name )</option>
+                        }
+                    </select>
                     @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
@@ -73,7 +83,7 @@
         <h3 class="card-title">Thông Tin Thuộc Tính</h3>
     </div>
 
-    <form id="form_attributes_put">
+    <form id="form_attributes_put" data-product-id="@Model.Id">
         <div class="card-body" id="form_attributes">
 
         </div>
@@ -91,13 +101,13 @@
 
     <div class="card card-primary m-2">
 
-        <form id="form_imgs_post" enctype="multipart/form-data">
-            <input type="text" required value="@Model.ID" name="PRODUCT_ID" hidden>
+        <form id="form_imgs_post" enctype="multipart/form-data" data-product-id="@Model.Id">
+            <input type="text" required value="@Model.Id" name="ProductId" hidden>
 
             <div class="card-body">
                 <div class="form-group my-2">
                     <label for="IMAGES_post">Thêm Mới Hình Ảnh</label>
-                    <input type="file" required accept="image/*" name="IMAGES" class="form-control-file" multiple id="IMAGES_post">
+                    <input type="file"  accept="image/*" name="IMAGES" class="form-control-file" multiple id="IMAGES_post">
                 </div>
             </div>
 
@@ -120,9 +130,119 @@
         $(document).ready(() => {
             let route_pro = "api/admin_products/"
             let route_pro_img = "api/admin_product_imgs/"
-            let route_pro_attr = "api/admin_Product_Attributes/"
+            let route_pro_attr = "api/admin_product_attributes/"
+
+            loadAttributes(@Model.CategoryId)
+            loadPro_Imgs()
+
+            //------ pro attribute
+            //---------------------------
+            function getPro_Attrs() {
+                return JSON.parse(
+                    $.ajax({
+                        url: route_pro_attr + @Model.Id,
+                        method: "GET",
+                        async: false
+                    }).responseText
+                )
+            }
+
+            function loadAttributes(cateId) {
+                $.ajax({
+                    url: "api/admin_attributes/" + cateId,
+                    method: "GET",
+                    async: false
+                }).done(data => {
+                    $("#form_attributes div").remove()
+                    data.forEach((item) => {
+                        let value = ""
+                        getPro_Attrs().forEach(item2 => {
+                            if (item.Id == item2.AttributeId) {
+                                value = item2.Value
+                            }
+                        })
+                        $("#form_attributes").append(`
+                        <div class="form-group">
+                            <label>${item.Name}</label>
+                            <textarea  class="form-control" name="${item.Code}" placeholder="${item.Name}" rows="1" >${value}</textarea>
+                        </div>
+                        `)
+                    })
+                }).fail(err => sendMessage(err.responseJSON.Message, "fail"))
+            }
 
 
+            //---- pro images
+            //-------------------------------------------------
+            function loadPro_Imgs() {
+            $.ajax({
+                url: route_pro_img + @Model.Id,
+                method: "GET",
+                async: false
+            }).done(data => {
+                $("#form_imgs table").remove()
+                data.forEach((item) => {
+                    item.Name = `<img width=100px class="image m-auto" src="${item.Name}" alt="${item.Name}" />`
+                })
+                $("#form_imgs").append(
+                    createTable(
+                        data,
+                        ["Hình Ảnh", "Active", "Ordering"],
+                        [
+                            ["Name", 1],
+                            ["Active", 2],
+                            ["Ordering",3]
+                        ],
+                        true, false,true
+                    )
+                )
+            })
+                .fail((err) => {
+                    sendMessage(err.responseJSON.Message,"fail")
+                })
+            }
+
+            $(document).on("click", ".btn_delete", (e) => {
+                e.preventDefault()
+                let tar = $(e.currentTarget);
+                $.ajax({
+                    url: route_pro_img + tar.attr("value"),
+                    method: "DELETE"
+                }).done(() => {
+                    sendMessage("Đã lưu thay đổi!", "done")
+                    loadPro_Imgs()
+                }).fail((err) => {
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+            })
+
+            $(document).on("click", ".btn_save", (e) => {
+                e.preventDefault()
+                let tar = $(e.currentTarget);
+                putOne(tar.attr("value"), {
+                    Ordering: $(`.Ordering.${tar.attr("value")}`).val(),
+                }, route_pro_img).done(() => {
+                    sendMessage("Đã lưu thay đổi!", "done")
+                    loadPro_Imgs()
+                }).fail((err) => {
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+            })
+
+
+            $(document).on("click", ".Active", (e) => {
+                e.preventDefault();
+                let tar = $(e.currentTarget);
+                putOne(tar.attr("value"), { Active: !(tar.text() == "true") }, route_pro_img).done(() => {
+                    sendMessage("Đã lưu thay đổi!", "done")
+                    changeBackgroundBoolOne(tar)
+                }).fail((err) => {
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+            });
+
+            //--- Form Submit
+            //----------------------------
             $("#form_put").submit((e) => {
                 e.preventDefault()
                 let tar = $(e.target)
@@ -134,40 +254,42 @@
                     data
                     , route_pro).done(() => {
                         sendMessage("Đã lưu thay đổi!", "done")
-                        loadDataTable()
-                    }).fail(() => {
-                        sendMessage("Vui lòng thử lại sau!", "fail")
+                        loadAttributes($("#CategoryId").val())
+                    }).fail((err) => {
+                        sendMessage(err.responseJSON.Message, "fail")
                     })
             })
 
-            function loadPro_Imgs() {
-            $.ajax({
-                url: route_pro_img + @Model.ID,
-                method: "GET",
-                async: false
-            }).done(data => {
-                $("#form_imgs table").remove()
-                data.forEach((item) => {
-                    item.NAME = `<img width=100px class="image m-auto" src="/uploads/${item.NAME}" alt="${item.NAME}" />`
-                })
-                $("#form_imgs").append(
-                    createTable(
-                        data,
-                        ["Hình Ảnh", "Active", "Ordering"],
-                        [
-                            ["NAME", 1],
-                            ["ACTIVE", 2],
-                            ["ORDERING",3]
-                        ],
-                        true, false,true
-                    )
-                )
-
+            $("#form_attributes_put").submit((e) => {
+                e.preventDefault()
+                let tar = $(e.target)
+                putOne(tar.attr("data-product-id"),
+                    tar.serializeFormJSON()
+                    , route_pro_attr).done(() => {
+                        sendMessage("Đã lưu thay đổi!", "done")
+                    }).fail((err) => {
+                        sendMessage(err.responseJSON.Message, "fail")
+                    })
             })
-                .fail(() => {
+            
+            $("#form_imgs_post").on("submit", (e) => {
+                e.preventDefault()
+                $.ajax({
+                    url: route_pro_img,
+                    method: "POST",
+                    data: new FormData($("#form_imgs_post")[0]),
+                    processData: false,
+                    contentType: false,
+                }).done(() => {
                     loadPro_Imgs()
+                    sendMessage("Đã thêm mới thành công!", "done")
                 })
-            }
+                    .fail((err) => {
+                        sendMessage(err.responseJSON.Message, "fail")
+                    })
+            })
+
+
 
         })
     </script>

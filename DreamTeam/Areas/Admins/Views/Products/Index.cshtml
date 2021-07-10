@@ -173,8 +173,8 @@
         $(document).on("change", ".Category", (e) => {
             let tar = $(e.currentTarget);
             arr_cate.forEach(item => {
-                if (item.ID == tar.val()) {
-                    $(`.Brand.${tar.attr("value")}`).html(item.BRAND)
+                if (item.Id == tar.val()) {
+                    $(`.Brand.${tar.attr("value")}`).html(item.Brand)
                 }
             })
         })

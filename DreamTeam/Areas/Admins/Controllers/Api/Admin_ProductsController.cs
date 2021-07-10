@@ -87,7 +87,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
         {
             try
             {
-                if (product.Name.Trim().Length <= 0 || product.OldPrice < 0 || product.Quantity < 0 || product.CurrentPrice < 0)
+                if (product.Name.Trim().Length <= 0 || product.OldPrice < 0 || product.Quantity < 0 || product.CurrentPrice < 0 || product.OldPrice < product.CurrentPrice)
                 {
                     return BadRequest("Thông tin sản phẩm không hợp lệ!");
                 }

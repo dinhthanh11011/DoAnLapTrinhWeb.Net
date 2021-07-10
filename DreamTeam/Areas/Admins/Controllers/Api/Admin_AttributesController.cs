@@ -37,6 +37,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 if (req.Name != null && ob.Name != (string)req.Name)
                 {
                     ob.Name = (string)req.Name;
+                    ob.Code = Support.support.parseToCode(ob.Name);
                 }
                 if (req.Ordering != null && ob.Ordering != (int)req.Ordering)
                 {
@@ -63,7 +64,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
             {
                 attribute.Active = true;
                 attribute.Ordering = db.Attributes.Where(x => x.CategoryId == attribute.CategoryId).Select(x => x.Ordering).DefaultIfEmpty(0).Max() + 1;
-
+                attribute.Code = support.parseToCode(attribute.Name);
                 db.Attributes.Add(attribute);
                 db.SaveChanges();
                 return Ok("Đã thêm mới!");

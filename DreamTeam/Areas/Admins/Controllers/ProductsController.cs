@@ -35,7 +35,7 @@ namespace DreamTeam.Areas.Admins.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", product.CategoryId);
+            ViewBag.Categories = db.Categories.Include(x=>x.Brand);
             return View(product);
         }
 

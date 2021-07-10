@@ -16,6 +16,9 @@ namespace DreamTeam.Models.Product
         public string Name { get; set; }
 
         [Required]
+        public string Code { get; set; }
+
+        [Required]
         [Display(Name = "Trạng Thái")]
         public bool Active { get; set; }
 
