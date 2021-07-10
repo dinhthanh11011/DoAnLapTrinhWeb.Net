@@ -21,6 +21,10 @@ namespace DreamTeam.Models
         [Display(Name ="Họ Tên")]
         public string FullName { get; set; }
 
+
+        [Required]
+        [Display(Name = "Trạng Thái")]
+        public bool Active { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

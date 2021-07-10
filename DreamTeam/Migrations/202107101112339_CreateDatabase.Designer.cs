@@ -7,13 +7,13 @@ namespace DreamTeam.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class CreateDatebase : IMigrationMetadata
+    public sealed partial class CreateDatabase : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateDatebase));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateDatabase));
         
         string IMigrationMetadata.Id
         {
-            get { return "202107100739021_CreateDatebase"; }
+            get { return "202107101112339_CreateDatabase"; }
         }
         
         string IMigrationMetadata.Source

@@ -23,7 +23,5 @@ namespace DreamTeam.Models.Store
         [Required]
         [Display(Name = "Số Thứ Tự")]
         public int Ordering { get; set; }
-
-        public ICollection<Invoice> Invoices { get; set; }
     }
 }

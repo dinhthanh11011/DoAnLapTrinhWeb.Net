@@ -8,9 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using DreamTeam.Models;
 using DreamTeam.Models.Store;
+using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers
 {
+    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]
     public class AdvertisementsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

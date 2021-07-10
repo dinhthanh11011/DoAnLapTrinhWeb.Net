@@ -3,7 +3,7 @@ namespace DreamTeam.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CreateDatebase : DbMigration
+    public partial class CreateDatabase : DbMigration
     {
         public override void Up()
         {
@@ -15,12 +15,11 @@ namespace DreamTeam.Migrations
                         Person = c.String(nullable: false, maxLength: 255),
                         Phone = c.String(nullable: false, maxLength: 10),
                         Location = c.String(nullable: false, maxLength: 255),
-                        UserId = c.Int(nullable: false),
-                        User_Id = c.String(maxLength: 128),
+                        UserId = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.User_Id)
-                .Index(t => t.User_Id);
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -28,6 +27,7 @@ namespace DreamTeam.Migrations
                     {
                         Id = c.String(nullable: false, maxLength: 128),
                         FullName = c.String(nullable: false, maxLength: 255),
+                        Active = c.Boolean(nullable: false),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
@@ -126,15 +126,14 @@ namespace DreamTeam.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Value = c.String(nullable: false, maxLength: 255),
                         Ratting = c.Int(nullable: false),
-                        CustomerId = c.Int(nullable: false),
+                        CustomerId = c.String(maxLength: 128),
                         ProductId = c.Int(nullable: false),
-                        Customer_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.Customer_Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.CustomerId)
                 .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
-                .Index(t => t.ProductId)
-                .Index(t => t.Customer_Id);
+                .Index(t => t.CustomerId)
+                .Index(t => t.ProductId);
             
             CreateTable(
                 "dbo.Comment_Img",
@@ -147,6 +146,20 @@ namespace DreamTeam.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Comments", t => t.CommentId, cascadeDelete: true)
                 .Index(t => t.CommentId);
+            
+            CreateTable(
+                "dbo.Product_Attribute",
+                c => new
+                    {
+                        ProductId = c.Int(nullable: false),
+                        AttributeId = c.Int(nullable: false),
+                        Value = c.String(nullable: false, maxLength: 255),
+                    })
+                .PrimaryKey(t => new { t.ProductId, t.AttributeId })
+                .ForeignKey("dbo.Attributes", t => t.AttributeId)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ProductId)
+                .Index(t => t.AttributeId);
             
             CreateTable(
                 "dbo.Product_Img",
@@ -232,18 +245,14 @@ namespace DreamTeam.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         CreateAt = c.DateTime(nullable: false),
-                        CustomerId = c.Int(nullable: false),
+                        CustomerId = c.String(maxLength: 128),
                         InvoiceStatusId = c.Int(nullable: false),
-                        Customer_Id = c.String(maxLength: 128),
-                        InvoiceStatus_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.Customer_Id)
-                .ForeignKey("dbo.InvoiceStatus", t => t.InvoiceStatus_Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.CustomerId)
                 .ForeignKey("dbo.InvoiceStatus", t => t.InvoiceStatusId)
-                .Index(t => t.InvoiceStatusId)
-                .Index(t => t.Customer_Id)
-                .Index(t => t.InvoiceStatus_Id);
+                .Index(t => t.CustomerId)
+                .Index(t => t.InvoiceStatusId);
             
             CreateTable(
                 "dbo.InvoiceStatus",
@@ -266,20 +275,6 @@ namespace DreamTeam.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Product_Attribute",
-                c => new
-                    {
-                        ProductId = c.Int(nullable: false),
-                        AttributeId = c.Int(nullable: false),
-                        Value = c.String(nullable: false, maxLength: 255),
-                    })
-                .PrimaryKey(t => new { t.ProductId, t.AttributeId })
-                .ForeignKey("dbo.Attributes", t => t.AttributeId)
-                .ForeignKey("dbo.Products", t => t.ProductId)
-                .Index(t => t.ProductId)
-                .Index(t => t.AttributeId);
-            
-            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -294,32 +289,28 @@ namespace DreamTeam.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Product_Attribute", "ProductId", "dbo.Products");
-            DropForeignKey("dbo.Product_Attribute", "AttributeId", "dbo.Attributes");
             DropForeignKey("dbo.InvoiceDetails", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Invoices", "InvoiceStatusId", "dbo.InvoiceStatus");
-            DropForeignKey("dbo.Invoices", "InvoiceStatus_Id", "dbo.InvoiceStatus");
             DropForeignKey("dbo.InvoiceDetails", "InvoiceId", "dbo.Invoices");
-            DropForeignKey("dbo.Invoices", "Customer_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Invoices", "CustomerId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Products", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Product_Img", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.Product_Attribute", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.Product_Attribute", "AttributeId", "dbo.Attributes");
             DropForeignKey("dbo.Comments", "ProductId", "dbo.Products");
-            DropForeignKey("dbo.Comments", "Customer_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Comments", "CustomerId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Comment_Img", "CommentId", "dbo.Comments");
             DropForeignKey("dbo.Products", "CategoryId", "dbo.Categories");
             DropForeignKey("dbo.Categories", "BrandId", "dbo.Brands");
             DropForeignKey("dbo.Brand_Img", "BrandId", "dbo.Brands");
             DropForeignKey("dbo.Attributes", "CategoryId", "dbo.Categories");
-            DropForeignKey("dbo.Addresses", "User_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Addresses", "UserId", "dbo.AspNetUsers");
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropIndex("dbo.Product_Attribute", new[] { "AttributeId" });
-            DropIndex("dbo.Product_Attribute", new[] { "ProductId" });
-            DropIndex("dbo.Invoices", new[] { "InvoiceStatus_Id" });
-            DropIndex("dbo.Invoices", new[] { "Customer_Id" });
             DropIndex("dbo.Invoices", new[] { "InvoiceStatusId" });
+            DropIndex("dbo.Invoices", new[] { "CustomerId" });
             DropIndex("dbo.InvoiceDetails", new[] { "ProductId" });
             DropIndex("dbo.InvoiceDetails", new[] { "InvoiceId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
@@ -327,18 +318,19 @@ namespace DreamTeam.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.Product_Img", new[] { "ProductId" });
+            DropIndex("dbo.Product_Attribute", new[] { "AttributeId" });
+            DropIndex("dbo.Product_Attribute", new[] { "ProductId" });
             DropIndex("dbo.Comment_Img", new[] { "CommentId" });
-            DropIndex("dbo.Comments", new[] { "Customer_Id" });
             DropIndex("dbo.Comments", new[] { "ProductId" });
+            DropIndex("dbo.Comments", new[] { "CustomerId" });
             DropIndex("dbo.Brand_Img", new[] { "BrandId" });
             DropIndex("dbo.Attributes", new[] { "CategoryId" });
             DropIndex("dbo.Categories", new[] { "BrandId" });
             DropIndex("dbo.Products", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Products", new[] { "CategoryId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.Addresses", new[] { "User_Id" });
+            DropIndex("dbo.Addresses", new[] { "UserId" });
             DropTable("dbo.AspNetRoles");
-            DropTable("dbo.Product_Attribute");
             DropTable("dbo.Logoes");
             DropTable("dbo.InvoiceStatus");
             DropTable("dbo.Invoices");
@@ -348,6 +340,7 @@ namespace DreamTeam.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.Product_Img");
+            DropTable("dbo.Product_Attribute");
             DropTable("dbo.Comment_Img");
             DropTable("dbo.Comments");
             DropTable("dbo.Brand_Img");

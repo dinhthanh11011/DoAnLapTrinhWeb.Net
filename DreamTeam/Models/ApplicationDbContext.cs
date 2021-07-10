@@ -44,11 +44,6 @@ namespace DreamTeam.Models
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Product_Attribute>()
-                .HasRequired(x => x.Product)
-                .WithMany()
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Invoice>()
                 .HasRequired(x => x.InvoiceStatus)
                 .WithMany()

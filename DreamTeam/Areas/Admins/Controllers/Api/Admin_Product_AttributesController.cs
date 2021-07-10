@@ -10,9 +10,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DreamTeam.Models;
 using DreamTeam.Models.Product;
+using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers.Api
 {
+    [Authorize(Roles = support.PRODUCT_MANAGE_PERMISSION)]
     public class Admin_Product_AttributesController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

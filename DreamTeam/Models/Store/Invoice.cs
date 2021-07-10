@@ -16,7 +16,7 @@ namespace DreamTeam.Models.Store
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime CreateAt { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public ApplicationUser Customer { get; set; }
 
         public int InvoiceStatusId { get; set; }

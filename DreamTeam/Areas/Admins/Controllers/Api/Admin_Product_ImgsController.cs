@@ -15,6 +15,7 @@ using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers.Api
 {
+    [Authorize(Roles = support.PRODUCT_MANAGE_PERMISSION)]
     public class Admin_Product_ImgsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

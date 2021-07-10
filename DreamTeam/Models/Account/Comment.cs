@@ -21,7 +21,7 @@ namespace DreamTeam.Models.Account
         public ApplicationUser Customer { get; set; }
         public Product.Product Product { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public int ProductId { get; set; }
 
         public ICollection<Comment_Img> Comment_Imgs { get; set; }

@@ -107,8 +107,7 @@ D:\CODE\C#\DreamTeam\DreamTeam\bin\Microsoft.Owin.Security.Twitter.xml
 D:\CODE\C#\DreamTeam\DreamTeam\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 D:\CODE\C#\DreamTeam\DreamTeam\bin\Microsoft.Owin.Security.OAuth.xml
 D:\CODE\C#\DreamTeam\DreamTeam\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.csprojAssemblyReference.cache
-D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.Migrations.CreateDatebase.resources
+D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.Migrations.CreateDatabase.resources
 D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.Migrations.InsertBaseData.resources
 D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.csproj.GenerateResource.cache
 D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.csproj.CoreCompileInputs.cache

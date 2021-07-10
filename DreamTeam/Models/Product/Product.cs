@@ -42,5 +42,6 @@ namespace DreamTeam.Models.Product
 
         public ICollection<Product_Img> Product_Imgs { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<Product_Attribute> Product_Attributes { get; set; }
     }
 }

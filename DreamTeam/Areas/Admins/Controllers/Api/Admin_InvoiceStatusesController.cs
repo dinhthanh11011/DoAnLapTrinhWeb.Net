@@ -10,9 +10,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using DreamTeam.Models;
 using DreamTeam.Models.Store;
+using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers.Api
 {
+    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]
     public class Admin_InvoiceStatusesController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

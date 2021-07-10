@@ -23,8 +23,8 @@ const sendMessage = (messageText, doneORfail) => {
 
 function createTable(data, arrClName, arrClDataName, btnsave, btndetails, btndelete) {
     let html = `
-      <table class="table table-striped col">
-        <thead>
+      <table class="table col">
+        <thead class="thead-light">
           <tr>
             <th scope="col">#</th>`;
     arrClName.forEach((item) => {

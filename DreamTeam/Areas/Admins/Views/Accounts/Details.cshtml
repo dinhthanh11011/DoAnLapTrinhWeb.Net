@@ -1,0 +1,94 @@
+﻿@model DreamTeam.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thông Tin Tài Khoản</h3>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>@Html.DisplayNameFor(model => model.UserName)</td>
+                    <td>@Html.DisplayFor(model => model.UserName)</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>@Html.DisplayNameFor(model => model.FullName)</td>
+                    <td>@Html.DisplayFor(model => model.FullName)</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>@Html.DisplayNameFor(model => model.Email)</td>
+                    <td>@Html.DisplayFor(model => model.Email)</td>
+                </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td>@Html.DisplayNameFor(model => model.EmailConfirmed)</td>
+                    <td>@Html.DisplayFor(model => model.EmailConfirmed)</td>
+                </tr>
+                <tr>
+                    <th scope="row">5</th>
+                    <td>@Html.DisplayNameFor(model => model.PhoneNumber)</td>
+                    <td>@Html.DisplayFor(model => model.PhoneNumber)</td>
+                </tr>
+                <tr>
+                    <th scope="row">6</th>
+                    <td>@Html.DisplayNameFor(model => model.PhoneNumberConfirmed)</td>
+                    <td>@Html.DisplayFor(model => model.PhoneNumberConfirmed)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Địa Chỉ</h3>
+    </div>
+    <div class="card-body" id="Address_list">
+
+
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Người Nhận Hàng</th>
+                    <th scope="col">Số Điện Thoại</th>
+                    <th scope="col">Địa Chỉ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Addresses)
+                {
+                    <tr>
+                        <td>@item.Person</td>
+                        <td>@item.Phone</td>
+                        <td>@item.Location</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+
+        })
+    </script>
+}

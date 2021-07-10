@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Tài Khoản</h3>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="card-body" id="tb_list">
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(() => {
+        const route = "api/admin_accounts/"
+        loadDataTable()
+
+        function loadDataTable() {
+            $.ajax({
+                url: route,
+                method: "GET"
+            }).done((data) => {
+                $("#tb_list table").remove()
+                $("#tb_list").append(
+                    createTable(data,
+                        ["Email", "Full Name", "Phone Number", "Active"],
+                        [
+                            ["Email", 1],
+                            ["FullName", 1],
+                            ["PhoneNumber", 1],
+                            ["Active", 2],
+                        ],false,true,false)
+                )
+            }).fail(() => sendMessage("Load dữ liệu thất bại!"))
+        }
+
+
+
+        $(document).on("click", ".Active", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), {
+                Active: !(tar.text() == "true"),
+                Id: tar.attr("value")
+            }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                changeBackgroundBoolOne(tar)
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        });
+
+
+        $(document).on("click", ".btn_detail", (e) => {
+            let tar = $(e.currentTarget);
+            window.location = window.location.href + "/Details/" + tar.attr("value")
+        });
+
+
+    })
+</script>

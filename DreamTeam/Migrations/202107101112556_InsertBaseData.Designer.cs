@@ -13,7 +13,7 @@ namespace DreamTeam.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202107100739391_InsertBaseData"; }
+            get { return "202107101112556_InsertBaseData"; }
         }
         
         string IMigrationMetadata.Source

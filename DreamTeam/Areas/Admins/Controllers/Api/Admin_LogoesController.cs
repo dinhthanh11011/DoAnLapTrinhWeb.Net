@@ -15,6 +15,7 @@ using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers.Api
 {
+    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]
     public class Admin_LogoesController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
