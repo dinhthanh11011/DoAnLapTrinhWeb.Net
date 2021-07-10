@@ -1,0 +1,128 @@
+﻿@model IEnumerable<DreamTeam.Models.Store.Advertisement>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Quảng Cáo</h3>
+    </div>
+
+    <div class="card card-primary m-2">
+
+        <form id="form_imgs_post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="form-group my-2">
+                    <label for="IMAGES_post">Thêm Mới</label>
+                    <input type="file" required accept="image/*" name="Images" class="form-control-file" multiple id="IMAGES_post">
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body" id="form_imgs">
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(() => {
+
+        let route = "api/Admin_Advertisements/"
+        loadPro_Imgs()
+
+
+        $("#form_imgs_post").on("submit", (e) => {
+            e.preventDefault()
+            $.ajax({
+                url: route,
+                method: "POST",
+                data: new FormData($("#form_imgs_post")[0]),
+                processData: false,
+                contentType: false,
+            }).done((data) => {
+                loadPro_Imgs()
+                sendMessage("Đã thêm mới thành công!", "done")
+            })
+                .fail((err) => {
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+        })
+
+
+        function loadPro_Imgs() {
+            $.ajax({
+                url: route,
+                method: "GET",
+            }).done(data => {
+                $("#form_imgs table").remove()
+                data.forEach((item) => {
+                    item.Name = `<img width=100px class="image m-auto" src="${item.Name}" alt="${item.Name}" />`
+                })
+                $("#form_imgs").append(
+                    createTable(
+                        data,
+                        ["Hình Ảnh", "Active", "Ordering"],
+                        [
+                            ["Name", 1],
+                            ["Active", 2],
+                            ["Ordering",3]
+                        ],
+                        true, false,true
+                    )
+                )
+
+            })
+                .fail(() => {
+                    sendMessage("Lấy dữ liệu thất bại!", "fail")
+                })
+        }
+
+        $(document).on("click", ".btn_delete", (e) => {
+            e.preventDefault()
+            let tar = $(e.currentTarget);
+            $.ajax({
+                url: route + tar.attr("value"),
+                method: "DELETE"
+            }).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadPro_Imgs()
+            }).fail(() => {
+                sendMessage("Vui lòng thử lại sau!", "fail")
+            })
+        })
+
+        $(document).on("click", ".btn_save", (e) => {
+            e.preventDefault()
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), {
+                Ordering: $(`.Ordering.${tar.attr("value")}`).val(),
+            }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadPro_Imgs()
+            }).fail((err) => {
+                sendMessage(err.responseJSON.Message, "fail")
+            })
+        })
+
+        $(document).on("click", ".Active", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), { Active: !(tar.text() == "true") }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                changeBackgroundBoolOne(tar)
+            }).fail((err) => {
+                sendMessage(err.responseJSON.Message, "fail")
+            })
+        });
+    })
+</script>

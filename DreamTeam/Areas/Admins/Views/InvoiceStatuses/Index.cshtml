@@ -1,0 +1,130 @@
+﻿@model IEnumerable<DreamTeam.Models.Store.InvoiceStatus>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thêm Mới</h3>
+    </div>
+    <form id="form_post" enctype="multipart/form-data">
+        <div class="card-body">
+
+            <div class="form-group">
+                <label for="NAME">Tên Trạng Thái Đơn Hàng</label>
+                <input required type="text" name="Name" class="form-control" id="NAME" placeholder="Tên Loại Sản Phẩm">
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" value="true" name="isDefault" class="form-check-input" id="ISDEFAULT">
+                <label class="form-check-label" for="ISDEFAULT">Đặt làm mặc định</label>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Trạng Thái Đơn Hàng</h3>
+    </div>
+    <div class="card-body" id="tb_list">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        let route = "api/admin_InvoiceStatuses/"
+        loadDataTable()
+
+
+        function loadDataTable() {
+            $.ajax({
+                url: route,
+                method: "GET"
+            }).done(data => {
+                $("#tb_list table").remove()
+                $("#tb_list").append(
+                    createTable(data,
+                        ["Tên Trạng Thái", "Mặc Định", "Ordering"],
+                        [
+                            ["Name", 3],
+                            ["isDefault", 2],
+                            ["Ordering", 3],
+                        ], true, false, true)
+                )
+            }).fail((err) => {
+                sendMessage(err.responseJSON.Message, "fail")
+            })
+        }
+
+        $("#form_post").on("submit", (e) => {
+            e.preventDefault()
+            let data = $("#form_post").serializeFormJSON();
+            !data.isDefault ? data.isDefault = false : data.isDefault = true
+            $.ajax({
+                url: route,
+                method: "POST",
+                processData: false,
+                contentType: "application/json",
+                data: JSON.stringify(data),
+            }).done(() => {
+                loadDataTable()
+                sendMessage("Đã thêm mới thành công!", "done")
+            }).fail(() => sendMessage("Thất bại!"))
+        })
+
+        $(document).on('click', '.isDefault', (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), { isDefault: !(tar.text() == "true") }, route).done(() => {
+                changeBackgroundBoolMany(tar, "isDefault")
+                sendMessage("Đã lưu thay đổi!", "done")
+            }).fail((err) => {
+                sendMessage(err.responseJSON.Message, "fail")
+            })
+        })
+
+        $(document).on("click", ".btn_save", (e) => {
+            e.preventDefault();
+            let tar = $(e.currentTarget);
+            putOne(tar.attr("value"), {
+                Name: $(`.Name.${tar.val()}`).val(),
+                Ordering: $(`.Ordering.${tar.val()}`).val(),
+            }, route).done(() => {
+                sendMessage("Đã lưu thay đổi!", "done")
+                loadDataTable()
+            }).fail((err) => {
+                sendMessage(err.responseJSON.Message, "fail")
+                loadDataTable()
+            })
+        });
+
+        $(document).on("click", ".btn_delete", (e) => {
+            e.preventDefault();
+            if (confirm("Xác nhận tiếp tục xóa!")) {
+                const id = $(e.currentTarget).val();
+                $.ajax({
+                    url: route + id,
+                    method: "DELETE",
+                })
+                    .done((data) => {
+                        sendMessage("Đã Xóa", "done");
+                        loadDataTable()
+                    })
+                    .fail((err) => {
+                        sendMessage(err.responseJSON.Message, "fail");
+                    });
+            }
+        });
+
+    })
+</script>

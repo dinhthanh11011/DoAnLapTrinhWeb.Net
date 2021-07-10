@@ -1,4 +1,4 @@
-namespace DreamTeam.Migrations
+﻿namespace DreamTeam.Migrations
 {
     using DreamTeam.Models;
     using System;
@@ -18,6 +18,12 @@ namespace DreamTeam.Migrations
                 Name = Support.support.PRODUCT_MANAGE_PERMISSION
             });
             dbContext.Roles.Add(new Microsoft.AspNet.Identity.EntityFramework.IdentityRole { Name = Support.support.STORE_MANAGE_PERMISSION });
+            dbContext.InvoiceStatuses.Add(new Models.Store.InvoiceStatus
+            {
+                Name = "Chưa xác nhận!",
+                Ordering = 1,
+                isDefault = true
+            });
             dbContext.SaveChanges();
         }
         

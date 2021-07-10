@@ -29,6 +29,5 @@ namespace DreamTeam.Models.Product
         public int Ordering { get; set; }
 
         public ICollection<Brand_Img> Brand_Imgs { get; set; }
-        public ICollection<Category> Categories { get; set; }
     }
 }

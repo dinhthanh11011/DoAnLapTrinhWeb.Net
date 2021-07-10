@@ -32,6 +32,5 @@ namespace DreamTeam.Models.Product
         public Brand Brand { get; set; }
 
         public ICollection<Attribute> Attributes { get; set; }
-        public ICollection<Product> Products { get; set; }
     }
 }

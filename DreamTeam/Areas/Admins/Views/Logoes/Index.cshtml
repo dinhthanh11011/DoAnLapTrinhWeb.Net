@@ -1,0 +1,85 @@
+﻿@model IEnumerable<DreamTeam.Models.Store.Logo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Logo</h3>
+    </div>
+
+    <div class="card card-primary m-2">
+
+        <form id="form_logo_post" enctype="multipart/form-data">
+
+            <div class="card-body">
+                <div class="form-group my-2">
+                    <label for="LOGO_post">Thay đổi Logo</label>
+                    <input type="file"  accept="image/*" name="Logo" class="form-control-file" id="LOGO_post">
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body" id="form_logo">
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(() => {
+        let route = "api/admin_logoes/"
+        load_Logo()
+
+        $("#form_logo_post").on("submit", (e) => {
+            e.preventDefault()
+            $.ajax({
+                url: route,
+                method: "POST",
+                data: new FormData($("#form_logo_post")[0]),
+                processData: false,
+                contentType: false,
+            }).done((data) => {
+                load_Logo()
+                sendMessage("Đã thêm mới thành công!", "done")
+            })
+                .fail((err) => {
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+        })
+
+        function load_Logo() {
+            $.ajax({
+                url: route,
+                method: "GET",
+            }).done(data => {
+                $("#form_logo table").remove()
+                data.forEach((item) => {
+                    item.Name = `<img width=100px class="image m-auto" src="${item.Name}" alt="${item.Name}" />`
+                })
+                $("#form_logo").append(
+                    createTable(
+                        data,
+                        ["Hình Ảnh"],
+                        [
+                            ["Name", 1],
+                        ],
+                        false, false, false
+                    )
+                )
+
+            })
+                .fail((err) => {
+                    sendMessage(err.responseJSON.Message,"fail")
+                })
+        }
+    })
+</script>

@@ -26,6 +26,7 @@ namespace DreamTeam.Models
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
         public DbSet<InvoiceStatus> InvoiceStatuses { get; set; }
+        public DbSet<Logo> Logos { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -48,6 +49,20 @@ namespace DreamTeam.Models
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Invoice>()
+                .HasRequired(x => x.InvoiceStatus)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Category>()
+                .HasRequired(x => x.Brand)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Product.Product>()
+                .HasRequired(x => x.Category)
+                .WithMany()
+                .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);
         }

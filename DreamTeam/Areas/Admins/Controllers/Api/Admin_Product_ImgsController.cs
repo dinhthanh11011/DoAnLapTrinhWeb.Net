@@ -65,6 +65,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
             }
         }
 
+        //put
         [ResponseType(typeof(void))]
         public IHttpActionResult PutProduct_Img(int id, dynamic req)
         {

@@ -3,7 +3,7 @@ namespace DreamTeam.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CreateDatabase : DbMigration
+    public partial class CreateDatebase : DbMigration
     {
         public override void Up()
         {
@@ -58,7 +58,7 @@ namespace DreamTeam.Migrations
                         ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Categories", t => t.CategoryId, cascadeDelete: false)
+                .ForeignKey("dbo.Categories", t => t.CategoryId)
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
                 .Index(t => t.CategoryId)
                 .Index(t => t.ApplicationUser_Id);
@@ -75,7 +75,7 @@ namespace DreamTeam.Migrations
                         BrandId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Brands", t => t.BrandId, cascadeDelete: false)
+                .ForeignKey("dbo.Brands", t => t.BrandId)
                 .Index(t => t.BrandId);
             
             CreateTable(
@@ -235,12 +235,15 @@ namespace DreamTeam.Migrations
                         CustomerId = c.Int(nullable: false),
                         InvoiceStatusId = c.Int(nullable: false),
                         Customer_Id = c.String(maxLength: 128),
+                        InvoiceStatus_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.Customer_Id)
-                .ForeignKey("dbo.InvoiceStatus", t => t.InvoiceStatusId, cascadeDelete: false)
+                .ForeignKey("dbo.InvoiceStatus", t => t.InvoiceStatus_Id)
+                .ForeignKey("dbo.InvoiceStatus", t => t.InvoiceStatusId)
                 .Index(t => t.InvoiceStatusId)
-                .Index(t => t.Customer_Id);
+                .Index(t => t.Customer_Id)
+                .Index(t => t.InvoiceStatus_Id);
             
             CreateTable(
                 "dbo.InvoiceStatus",
@@ -250,6 +253,15 @@ namespace DreamTeam.Migrations
                         Name = c.String(nullable: false, maxLength: 255),
                         isDefault = c.Boolean(nullable: false),
                         Ordering = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Logoes",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 255),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -286,6 +298,7 @@ namespace DreamTeam.Migrations
             DropForeignKey("dbo.Product_Attribute", "AttributeId", "dbo.Attributes");
             DropForeignKey("dbo.InvoiceDetails", "ProductId", "dbo.Products");
             DropForeignKey("dbo.Invoices", "InvoiceStatusId", "dbo.InvoiceStatus");
+            DropForeignKey("dbo.Invoices", "InvoiceStatus_Id", "dbo.InvoiceStatus");
             DropForeignKey("dbo.InvoiceDetails", "InvoiceId", "dbo.Invoices");
             DropForeignKey("dbo.Invoices", "Customer_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
@@ -304,6 +317,7 @@ namespace DreamTeam.Migrations
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.Product_Attribute", new[] { "AttributeId" });
             DropIndex("dbo.Product_Attribute", new[] { "ProductId" });
+            DropIndex("dbo.Invoices", new[] { "InvoiceStatus_Id" });
             DropIndex("dbo.Invoices", new[] { "Customer_Id" });
             DropIndex("dbo.Invoices", new[] { "InvoiceStatusId" });
             DropIndex("dbo.InvoiceDetails", new[] { "ProductId" });
@@ -325,6 +339,7 @@ namespace DreamTeam.Migrations
             DropIndex("dbo.Addresses", new[] { "User_Id" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Product_Attribute");
+            DropTable("dbo.Logoes");
             DropTable("dbo.InvoiceStatus");
             DropTable("dbo.Invoices");
             DropTable("dbo.InvoiceDetails");
