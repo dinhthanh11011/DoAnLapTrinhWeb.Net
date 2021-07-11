@@ -21,7 +21,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
         // GET: api/Admin_Products
         public dynamic GetProducts()
         {
-            return db.Products.Select(x=>new { x.Id,x.Name,x.OldPrice,x.CurrentPrice,x.Active,x.Ordering,Category = x.Category.Name,Brand = x.Category.Brand.Name}).OrderBy(x=>x.Ordering).ToList();
+            return db.Products.Select(x=>new { x.Id,x.Name,x.OldPrice,x.CurrentPrice,x.Active,x.Hot,x.New,x.Ordering,Category = x.Category.Name,Brand = x.Category.Brand.Name}).OrderBy(x=>x.Ordering).ToList();
         }
 
         // GET: api/Admin_Products/5
@@ -68,6 +68,14 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 {
                     pro.Active = bool.Parse((string)req.Active);
                 }
+                if (req.Hot != null)
+                {
+                    pro.Hot = bool.Parse((string)req.Hot);
+                }
+                if (req.New != null)
+                {
+                    pro.New = bool.Parse((string)req.New);
+                }
                 if (req.Ordering != null)
                 {
                     pro.Ordering = int.Parse((string)req.Ordering);
@@ -92,6 +100,8 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                     return BadRequest("Thông tin sản phẩm không hợp lệ!");
                 }
                 product.Active = true;
+                product.Hot = true;
+                product.New = true;
                 product.Ordering = db.Products.Select(x => x.Ordering).DefaultIfEmpty(0).Max() + 1;
                 db.Products.Add(product);
                 db.SaveChanges();

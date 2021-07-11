@@ -34,6 +34,14 @@ namespace DreamTeam.Models.Product
         public bool Active { get; set; }
 
         [Required]
+        [Display(Name = "Nỗi bật")]
+        public bool Hot { get; set; }
+
+        [Required]
+        [Display(Name = "Mới về")]
+        public bool New { get; set; }
+
+        [Required]
         [Display(Name = "Số Thứ Tự")]
         public int Ordering { get; set; }
 

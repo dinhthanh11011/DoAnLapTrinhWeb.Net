@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DreamTeam.Models.Store.Advertisement>
+﻿@model DreamTeam.Models.Store.Advertisement
 
 @{
     ViewBag.Title = "Index";
@@ -15,8 +15,18 @@
 
         <form id="form_imgs_post" enctype="multipart/form-data">
             <div class="card-body">
-                <div class="form-group my-2">
-                    <label for="IMAGES_post">Thêm Mới</label>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Title)
+                    <input type="text" required name="Title" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Description)
+                    <textarea rows="3" required name="Description" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Image)
                     <input type="file" required accept="image/*" name="Images" class="form-control-file" multiple id="IMAGES_post">
                 </div>
             </div>
@@ -66,18 +76,18 @@
             }).done(data => {
                 $("#form_imgs table").remove()
                 data.forEach((item) => {
-                    item.Name = `<img width=100px class="image m-auto" src="${item.Name}" alt="${item.Name}" />`
+                    item.Image = `<img width=100px class="image m-auto" src="${item.Image}" alt="${item.Image}" />`
                 })
                 $("#form_imgs").append(
                     createTable(
                         data,
                         ["Hình Ảnh", "Active", "Ordering"],
                         [
-                            ["Name", 1],
+                            ["Image", 1],
                             ["Active", 2],
                             ["Ordering",3]
                         ],
-                        true, false,true
+                        true, true,true
                     )
                 )
 
@@ -112,6 +122,12 @@
             }).fail((err) => {
                 sendMessage(err.responseJSON.Message, "fail")
             })
+        })
+
+        $(document).on("click", ".btn_detail", (e) => {
+            e.preventDefault()
+            let tar = $(e.currentTarget);
+            window.location = window.location.href + "/Details/" + tar.attr("value")
         })
 
         $(document).on("click", ".Active", (e) => {

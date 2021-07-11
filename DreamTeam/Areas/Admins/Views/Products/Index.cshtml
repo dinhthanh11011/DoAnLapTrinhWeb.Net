@@ -16,7 +16,12 @@
 
             <div class="form-group">
                 <label for="CategoryId">Loại Sản Phẩm</label>
-                @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control col" })
+                <select required name="CategoryId" class="form-control" id="CategoryId">
+                    @foreach (var item in @ViewBag.Categories)
+                    {
+                        <option value="@item.Id">@item.Name ( @item.Brand.Name )</option>
+                    }
+                </select>
             </div>
 
             <div class="form-group">
@@ -73,7 +78,7 @@
                 $("#tb_list table").remove()
                 $("#tb_list").append(
                     createTable(data,
-                        ["Thương Hiệu", "Loại SP", "Tên", "Giá Gốc", "Giá Bán", "Active", "Ordering"],
+                        ["Thương Hiệu", "Loại SP", "Tên", "Giá Gốc", "Giá Bán", "Active", "Hot", "New", "Ordering"],
                         [
                             ["Brand", 1],
                             ["Category", 4, arr_cate],
@@ -81,6 +86,8 @@
                             ["OldPrice", 3],
                             ["CurrentPrice", 3],
                             ["Active", 2],
+                            ["Hot", 2],
+                            ["New", 2],
                             ["Ordering", 3],
                         ], true, true, true)
                 )
@@ -158,10 +165,16 @@
             window.location = window.location.href + `/Details/${tar.attr("value")}`
         })
 
-        $(document).on("click", ".Active", (e) => {
+        $(document).on("click", ".Active,.Hot,.New", (e) => {
             e.preventDefault();
             let tar = $(e.currentTarget);
-            putOne(tar.attr("value"), { Active: !(tar.text() == "true") }, route).done(() => {
+            let data = { Active: !(tar.text() == "true") }
+            if (tar.hasClass("Hot")) {
+                data = { Hot: !(tar.text() == "true") }
+            } else if (tar.hasClass("New")) {
+                data = { New: !(tar.text() == "true") }
+            }
+            putOne(tar.attr("value"), data , route).done(() => {
                 sendMessage("Đã lưu thay đổi!", "done")
                 changeBackgroundBoolOne(tar)
             }).fail(() => {

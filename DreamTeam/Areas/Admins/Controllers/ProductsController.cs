@@ -19,7 +19,7 @@ namespace DreamTeam.Areas.Admins.Controllers
         // GET: Admins/Products
         public ActionResult Index()
         {
-            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
+            ViewBag.Categories = db.Categories.Include(x => x.Brand);
             return View();
         }
 

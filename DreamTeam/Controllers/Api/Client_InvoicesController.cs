@@ -15,7 +15,7 @@ using Microsoft.AspNet.Identity;
 
 namespace DreamTeam.Controllers.Api
 {
-    [Authorize]
+   /* [Authorize]*/
     public class Client_InvoicesController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -23,7 +23,8 @@ namespace DreamTeam.Controllers.Api
         // GET: api/Client_Invoices
         public dynamic GetInvoices()
         {
-            return db.Invoices.OrderBy(x=>x.CreateAt).Where(x=>x.CustomerId == User.Identity.GetUserId()).Select(x=>new { 
+            string userId = User.Identity.GetUserId();
+            return db.Invoices.OrderBy(x=>x.CreateAt).Where(x=>x.CustomerId == userId).Select(x=>new { 
                 x.CreateAt,Status = x.InvoiceStatus.Name,
                 Details = x.InvoiceDetails.Where(y=>y.Product.Active == true).Select(y=>new { 
                     Name = y.Product.Name,y.Price,y.Quantity,
@@ -37,7 +38,8 @@ namespace DreamTeam.Controllers.Api
         [ResponseType(typeof(Invoice))]
         public dynamic GetInvoice(int id)
         {
-            return db.Invoices.OrderBy(x => x.CreateAt).Where(x => x.CustomerId == User.Identity.GetUserId() && x.InvoiceStatusId == id).Select(x => new {
+            string userId = User.Identity.GetUserId();
+            return db.Invoices.OrderBy(x => x.CreateAt).Where(x => x.CustomerId == userId && x.InvoiceStatusId == id).Select(x => new {
                 x.CreateAt,
                 Status = x.InvoiceStatus.Name,
                 Details = x.InvoiceDetails.Where(y => y.Product.Active == true).Select(y => new {
@@ -50,18 +52,14 @@ namespace DreamTeam.Controllers.Api
         }
 
         // POST: api/Client_Invoices
-        [ResponseType(typeof(Invoice))]
-        public IHttpActionResult PostInvoice(Invoice invoice)
+        [HttpPost]
+        public IHttpActionResult PostInvoice(List<InvoiceDetail> req)
         {
-            if (!ModelState.IsValid)
+            foreach (var item in req)
             {
-                return BadRequest(ModelState);
+
             }
-
-            db.Invoices.Add(invoice);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = invoice.Id }, invoice);
+            return Ok();
         }
 
         // DELETE: api/Client_Invoices/5

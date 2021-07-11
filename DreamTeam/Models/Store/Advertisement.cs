@@ -12,8 +12,18 @@ namespace DreamTeam.Models.Store
 
         [Required]
         [StringLength(255)]
-        [Display(Name = "Tên Hình")]
-        public string Name { get; set; }
+        [Display(Name = "Hình Ảnh")]
+        public string Image { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        [Display(Name = "Tiêu Đề")]
+        public string Title { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        [Display(Name = "Mô Tả")]
+        public string Description { get; set; }
 
         [Required]
         [Display(Name = "Trạng Thái")]

@@ -20,11 +20,11 @@ namespace DreamTeam.Controllers.Api
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Client_Carts/5
         [ResponseType(typeof(Product))]
         public dynamic GetCarts()
         {
-            return db.Users.Find(User.Identity.GetUserId()).Carts.OrderBy(x=>x.Ordering).Where(x => x.Active == true).Select(x=>new {
+            string userId = User.Identity.GetUserId();
+            return db.Users.Find(userId).Carts.OrderBy(x=>x.Ordering).Where(x => x.Active == true).Select(x=>new {
                 x.Id,x.Name,x.Quantity,x.OldPrice,x.CurrentPrice,
                 Avatar = x.Product_Imgs.OrderBy(z => z.Ordering).Select(z => support.UPLOAD_FOLDER_NAME + "/" + z.Name).FirstOrDefault()
             });
@@ -36,7 +36,8 @@ namespace DreamTeam.Controllers.Api
         {
             try
             {
-                db.Users.Find(User.Identity.GetUserId()).Carts.Add(db.Products.Find(id));
+                string userId = User.Identity.GetUserId();
+                db.Users.Find(userId).Carts.Add(db.Products.Find(id));
                 db.SaveChanges();
                 return Ok("Đã lưu thay đổi!");
             }
@@ -52,7 +53,8 @@ namespace DreamTeam.Controllers.Api
         {
             try
             {
-                db.Users.Find(User.Identity.GetUserId()).Carts.Remove(db.Products.Find(id));
+                string userId = User.Identity.GetUserId();
+                db.Users.Find(userId).Carts.Remove(db.Products.Find(id));
                 db.SaveChanges();
                 return Ok("Đã lưu thay đổi!");
             }

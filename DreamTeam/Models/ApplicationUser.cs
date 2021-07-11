@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -12,9 +13,15 @@ namespace DreamTeam.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        
         public ICollection<Address> Addresses{ get; set; }
         public ICollection<Product.Product> Carts{ get; set; }
         public ICollection<Comment> Comments{ get; set; }
+
+        public ApplicationUser()
+        {
+            Carts = new Collection<Product.Product>();
+        }
 
         [Required]
         [StringLength(255)]

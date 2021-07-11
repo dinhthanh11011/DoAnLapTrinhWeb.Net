@@ -212,13 +212,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107101112339_CreateDatabase.cs" />
-    <Compile Include="Migrations\202107101112339_CreateDatabase.Designer.cs">
-      <DependentUpon>202107101112339_CreateDatabase.cs</DependentUpon>
+    <Compile Include="Migrations\202107111600061_CreateDatabase.cs" />
+    <Compile Include="Migrations\202107111600061_CreateDatabase.Designer.cs">
+      <DependentUpon>202107111600061_CreateDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107101112556_InsertBaseData.cs" />
-    <Compile Include="Migrations\202107101112556_InsertBaseData.Designer.cs">
-      <DependentUpon>202107101112556_InsertBaseData.cs</DependentUpon>
+    <Compile Include="Migrations\202107111600272_InsertBaseData.cs" />
+    <Compile Include="Migrations\202107111600272_InsertBaseData.Designer.cs">
+      <DependentUpon>202107111600272_InsertBaseData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -2245,6 +2245,7 @@
     <Content Include="Areas\Admins\Views\Logoes\Index.cshtml" />
     <Content Include="Areas\Admins\Views\Accounts\Index.cshtml" />
     <Content Include="Areas\Admins\Views\Accounts\Details.cshtml" />
+    <Content Include="Areas\Admins\Views\Advertisements\Details.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2311,11 +2312,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202107101112339_CreateDatabase.resx">
-      <DependentUpon>202107101112339_CreateDatabase.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107111600061_CreateDatabase.resx">
+      <DependentUpon>202107111600061_CreateDatabase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202107101112556_InsertBaseData.resx">
-      <DependentUpon>202107101112556_InsertBaseData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107111600272_InsertBaseData.resx">
+      <DependentUpon>202107111600272_InsertBaseData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

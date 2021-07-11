@@ -53,6 +53,8 @@ namespace DreamTeam.Migrations
                         OldPrice = c.Long(nullable: false),
                         CurrentPrice = c.Long(nullable: false),
                         Active = c.Boolean(nullable: false),
+                        Hot = c.Boolean(nullable: false),
+                        New = c.Boolean(nullable: false),
                         Ordering = c.Int(nullable: false),
                         CategoryId = c.Int(nullable: false),
                         ApplicationUser_Id = c.String(maxLength: 128),
@@ -218,7 +220,9 @@ namespace DreamTeam.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 255),
+                        Image = c.String(nullable: false, maxLength: 255),
+                        Title = c.String(nullable: false, maxLength: 255),
+                        Description = c.String(nullable: false, maxLength: 255),
                         Active = c.Boolean(nullable: false),
                         Ordering = c.Int(nullable: false),
                     })

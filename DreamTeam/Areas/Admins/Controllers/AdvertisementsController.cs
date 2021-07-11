@@ -12,7 +12,7 @@ using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers
 {
-    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]
+  /*  [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]*/
     public class AdvertisementsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -21,6 +21,15 @@ namespace DreamTeam.Areas.Admins.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult Details(int id)
+        {
+            var ob = db.Advertisements.Find(id);
+            if (ob == null)
+                return HttpNotFound();
+            ob.Image = support.UPLOAD_FOLDER_NAME + "/" + ob.Image;
+            return View(ob);
         }
 
         protected override void Dispose(bool disposing)

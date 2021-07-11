@@ -15,7 +15,7 @@ using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers.Api
 {
-    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]
+/*    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]*/
     public class Admin_AdvertisementsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -26,7 +26,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
             var data = db.Advertisements.OrderBy(x=>x.Ordering).ToList();
             foreach (var item in data)
             {
-                item.Name = support.UPLOAD_FOLDER_NAME + "/" + item.Name;
+                item.Image = support.UPLOAD_FOLDER_NAME + "/" + item.Image;
             }
             return data;
         }
@@ -55,6 +55,43 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
             }
         }
 
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutAdvertisement()
+        {
+            try
+            {
+                var data = HttpContext.Current.Request.Form;
+                var id = int.Parse(data.Get("Id"));
+                var title = data.Get("Title");
+                var description = data.Get("Description");
+                var active = data.Get("Active");
+                var ordering = int.Parse(data.Get("Ordering"));
+                if(title.Length <= 0 || description.Length<=0)
+                    return BadRequest("Vui lòng điền đầy đủ thông tin");
+
+                var ob = db.Advertisements.Find(id);
+                var files = support.checkFileUpLoad(HttpContext.Current.Request.Files);
+                if (files!=null)
+                {
+                    var file = files[0];
+                    var fileUp = support.uploadFile(file);
+                    support.deleteImg(ob.Image);
+                    ob.Image = fileUp.fileName;
+                    file.SaveAs(fileUp.path);
+                }
+                ob.Active = active.Contains("true");
+                ob.Title = title;
+                ob.Description = description;
+                ob.Ordering = ordering;
+                db.SaveChanges();
+                return Ok("Đã lưu thay đổi!");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Đã xãy ra lỗi!");
+            }
+        }
+
         // POST: api/Admin_Advertisements
         [ResponseType(typeof(Advertisement))]
         public IHttpActionResult PostAdvertisement()
@@ -64,14 +101,18 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 var files = support.checkFileUpLoad(HttpContext.Current.Request.Files);
                 if (files != null)
                 {
+                    var title = HttpContext.Current.Request.Form.Get("Title");
+                    var des = HttpContext.Current.Request.Form.Get("Description");
                     for (int i = 0; i < files.Count; i++)
                     {
                         var item = files[i];
                         var fileUp = support.uploadFile(item);
                         db.Advertisements.Add(new Advertisement
                         {
-                            Name = fileUp.fileName,
+                            Image = fileUp.fileName,
                             Active =true,
+                            Title = title,
+                            Description = des,
                             Ordering = db.Advertisements.Select(x => x.Ordering).DefaultIfEmpty(0).Max() + 1
                         });
                         db.SaveChanges();
@@ -94,7 +135,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
             try
             {
                 var ob = db.Advertisements.Find(id);
-                support.deleteImg(ob.Name);
+                support.deleteImg(ob.Image);
                 db.Advertisements.Remove(ob);
                 db.SaveChanges();
                 return Ok("Đã xóa!");
