@@ -24,9 +24,9 @@ namespace DreamTeam.Controllers.Api
         public dynamic GetCarts()
         {
             string userId = User.Identity.GetUserId();
-            return db.Users.Find(userId).Carts.OrderBy(x=>x.Ordering).Where(x => x.Active == true).Select(x=>new {
-                x.Id,x.Name,x.Quantity,x.OldPrice,x.CurrentPrice,
-                Avatar = x.Product_Imgs.OrderBy(z => z.Ordering).Select(z => support.UPLOAD_FOLDER_NAME + "/" + z.Name).FirstOrDefault()
+            return db.Users.Find(userId).Carts.OrderBy(x=>x.Product.Ordering).Where(x => x.Product.Active == true).Select(x=>new {
+                x.Product.Id,x.Product.Name,x.Product.Quantity,x.Product.OldPrice,x.Product.CurrentPrice,
+                Avatar = x.Product.Product_Imgs.OrderBy(z => z.Ordering).Select(z => support.UPLOAD_FOLDER_NAME + "/" + z.Name).FirstOrDefault()
             });
         }
 
@@ -37,7 +37,10 @@ namespace DreamTeam.Controllers.Api
             try
             {
                 string userId = User.Identity.GetUserId();
-                db.Users.Find(userId).Carts.Add(db.Products.Find(id));
+                db.Carts.Add(new Models.Account.Cart { 
+                    ProductId = id,
+                    CustomerId = userId
+                });
                 db.SaveChanges();
                 return Ok("Đã lưu thay đổi!");
             }
@@ -54,7 +57,10 @@ namespace DreamTeam.Controllers.Api
             try
             {
                 string userId = User.Identity.GetUserId();
-                db.Users.Find(userId).Carts.Remove(db.Products.Find(id));
+                db.Carts.Remove(new Models.Account.Cart {
+                    ProductId = id,
+                    CustomerId = userId
+                });
                 db.SaveChanges();
                 return Ok("Đã lưu thay đổi!");
             }

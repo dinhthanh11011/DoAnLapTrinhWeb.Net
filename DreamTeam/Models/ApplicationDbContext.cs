@@ -27,6 +27,7 @@ namespace DreamTeam.Models
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
         public DbSet<InvoiceStatus> InvoiceStatuses { get; set; }
         public DbSet<Logo> Logos { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -43,6 +44,11 @@ namespace DreamTeam.Models
                 .HasRequired(x => x.Attribute)
                 .WithMany()
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Cart>()
+                .HasRequired(x => x.Product)
+                .WithMany()
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Invoice>()
                 .HasRequired(x => x.InvoiceStatus)

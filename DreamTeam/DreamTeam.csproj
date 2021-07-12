@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -203,28 +204,32 @@
     <Compile Include="Areas\Admins\Controllers\PermissionsController.cs" />
     <Compile Include="Areas\Admins\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\Client_AdvertisementsController.cs" />
     <Compile Include="Controllers\Api\Client_CartsController.cs" />
     <Compile Include="Controllers\Api\Client_CommentsController.cs" />
     <Compile Include="Controllers\Api\Client_InvoicesController.cs" />
     <Compile Include="Controllers\Api\Client_ProductsController.cs" />
+    <Compile Include="Controllers\Api\Client_Products_NewController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107111600061_CreateDatabase.cs" />
-    <Compile Include="Migrations\202107111600061_CreateDatabase.Designer.cs">
-      <DependentUpon>202107111600061_CreateDatabase.cs</DependentUpon>
+    <Compile Include="Migrations\202107120540182_CreateDatabase.cs" />
+    <Compile Include="Migrations\202107120540182_CreateDatabase.Designer.cs">
+      <DependentUpon>202107120540182_CreateDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107111600272_InsertBaseData.cs" />
-    <Compile Include="Migrations\202107111600272_InsertBaseData.Designer.cs">
-      <DependentUpon>202107111600272_InsertBaseData.cs</DependentUpon>
+    <Compile Include="Migrations\202107120540404_InsertBaseData.cs" />
+    <Compile Include="Migrations\202107120540404_InsertBaseData.Designer.cs">
+      <DependentUpon>202107120540404_InsertBaseData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Account\Address.cs" />
+    <Compile Include="Models\Account\Cart.cs" />
     <Compile Include="Models\Account\Comment.cs" />
     <Compile Include="Models\Account\Comment_Img.cs" />
+    <Compile Include="Models\Account\keyAttribute.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Product\Attribute.cs" />
@@ -2141,6 +2146,86 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="public\css\modern-business.css" />
+    <Content Include="public\glidejs\glide\build\banner.js" />
+    <Content Include="public\glidejs\glide\build\build.js" />
+    <Content Include="public\glidejs\glide\build\build.min.js" />
+    <Content Include="public\glidejs\glide\build\esm.js" />
+    <Content Include="public\glidejs\glide\build\esm.modular.js" />
+    <Content Include="public\glidejs\glide\build\umd.js" />
+    <Content Include="public\glidejs\glide\build\umd.min.js" />
+    <Content Include="public\glidejs\glide\dist\css\glide.core.css" />
+    <Content Include="public\glidejs\glide\dist\css\glide.core.min.css" />
+    <Content Include="public\glidejs\glide\dist\css\glide.theme.css" />
+    <Content Include="public\glidejs\glide\dist\css\glide.theme.min.css" />
+    <Content Include="public\glidejs\glide\dist\glide.esm.js" />
+    <Content Include="public\glidejs\glide\dist\glide.js" />
+    <Content Include="public\glidejs\glide\dist\glide.min.js" />
+    <Content Include="public\glidejs\glide\dist\glide.modular.esm.js" />
+    <Content Include="public\glidejs\glide\entry\entry-complete.js" />
+    <Content Include="public\glidejs\glide\entry\entry-modular.js" />
+    <Content Include="public\glidejs\glide\src\components\anchors.js" />
+    <Content Include="public\glidejs\glide\src\components\autoplay.js" />
+    <Content Include="public\glidejs\glide\src\components\breakpoints.js" />
+    <Content Include="public\glidejs\glide\src\components\build.js" />
+    <Content Include="public\glidejs\glide\src\components\clones.js" />
+    <Content Include="public\glidejs\glide\src\components\controls.js" />
+    <Content Include="public\glidejs\glide\src\components\direction.js" />
+    <Content Include="public\glidejs\glide\src\components\gaps.js" />
+    <Content Include="public\glidejs\glide\src\components\html.js" />
+    <Content Include="public\glidejs\glide\src\components\images.js" />
+    <Content Include="public\glidejs\glide\src\components\keyboard.js" />
+    <Content Include="public\glidejs\glide\src\components\move.js" />
+    <Content Include="public\glidejs\glide\src\components\peek.js" />
+    <Content Include="public\glidejs\glide\src\components\resize.js" />
+    <Content Include="public\glidejs\glide\src\components\run.js" />
+    <Content Include="public\glidejs\glide\src\components\sizes.js" />
+    <Content Include="public\glidejs\glide\src\components\swipe.js" />
+    <Content Include="public\glidejs\glide\src\components\transition.js" />
+    <Content Include="public\glidejs\glide\src\components\translate.js" />
+    <Content Include="public\glidejs\glide\src\core\event\events-binder.js" />
+    <Content Include="public\glidejs\glide\src\core\event\events-bus.js" />
+    <Content Include="public\glidejs\glide\src\core\index.js" />
+    <Content Include="public\glidejs\glide\src\defaults.js" />
+    <Content Include="public\glidejs\glide\src\index.js" />
+    <Content Include="public\glidejs\glide\src\mutator\index.js" />
+    <Content Include="public\glidejs\glide\src\mutator\transformers\focusing.js" />
+    <Content Include="public\glidejs\glide\src\mutator\transformers\gap.js" />
+    <Content Include="public\glidejs\glide\src\mutator\transformers\grow.js" />
+    <Content Include="public\glidejs\glide\src\mutator\transformers\peeking.js" />
+    <Content Include="public\glidejs\glide\src\mutator\transformers\rtl.js" />
+    <Content Include="public\glidejs\glide\src\utils\detect-passive-event.js" />
+    <Content Include="public\glidejs\glide\src\utils\dom.js" />
+    <Content Include="public\glidejs\glide\src\utils\log.js" />
+    <Content Include="public\glidejs\glide\src\utils\object.js" />
+    <Content Include="public\glidejs\glide\src\utils\string.js" />
+    <Content Include="public\glidejs\glide\src\utils\time.js" />
+    <Content Include="public\glidejs\glide\src\utils\unit.js" />
+    <Content Include="public\glidejs\glide\src\utils\wait.js" />
+    <Content Include="public\glidejs\glide\tests\fixtures\html.js" />
+    <Content Include="public\glidejs\glide\tests\fixtures\query.js" />
+    <Content Include="public\glidejs\glide\tests\fixtures\transition.js" />
+    <Content Include="public\glidejs\glide\tests\functional\autoplay.test.js" />
+    <Content Include="public\glidejs\glide\tests\functional\carousel.test.js" />
+    <Content Include="public\glidejs\glide\tests\functional\classes.test.js" />
+    <Content Include="public\glidejs\glide\tests\functional\destroy.test.js" />
+    <Content Include="public\glidejs\glide\tests\functional\go.test.js" />
+    <Content Include="public\glidejs\glide\tests\functional\slider.test.js" />
+    <Content Include="public\glidejs\glide\tests\functional\update.test.js" />
+    <Content Include="public\glidejs\glide\tests\integration\events.test.js" />
+    <Content Include="public\glidejs\glide\tests\integration\instance.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\dom.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\events-binder.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\log.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\mount.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\object.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\string.test.js" />
+    <Content Include="public\glidejs\glide\tests\unit\unit.test.js" />
+    <Content Include="public\css\style.css" />
+    <Content Include="public\js\bootstrap.bundle.min.js" />
+    <Content Include="public\js\index.js" />
+    <Content Include="public\js\products.js" />
+    <Content Include="public\js\slider.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admins\Views\web.config" />
@@ -2246,6 +2331,17 @@
     <Content Include="Areas\Admins\Views\Accounts\Index.cshtml" />
     <Content Include="Areas\Admins\Views\Accounts\Details.cshtml" />
     <Content Include="Areas\Admins\Views\Advertisements\Details.cshtml" />
+    <Content Include="public\glidejs\glide\.babelrc" />
+    <Content Include="public\glidejs\glide\.eslintrc" />
+    <Content Include="public\glidejs\glide\.stylelintrc" />
+    <Content Include="public\glidejs\glide\.travis.yml" />
+    <Content Include="public\glidejs\glide\LICENSE" />
+    <Content Include="public\glidejs\glide\package.json" />
+    <Content Include="public\glidejs\glide\README.md" />
+    <Content Include="public\glidejs\glide\src\assets\sass\glide.core.scss" />
+    <Content Include="public\glidejs\glide\src\assets\sass\glide.theme.scss" />
+    <Content Include="public\glidejs\glide\src\assets\sass\_variables.scss" />
+    <Content Include="public\glidejs\glide\tests\config.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2293,6 +2389,10 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Login\_Layout.cshtml" />
+    <Content Include="Views\Shared\ChildPageLayout\Head.cshtml" />
+    <Content Include="Views\Shared\ChildPageLayout\Advertisement.cshtml" />
+    <Content Include="Views\Shared\ChildPageLayout\Nav.cshtml" />
+    <Content Include="Views\Shared\ChildPageLayout\Scripts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2312,11 +2412,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202107111600061_CreateDatabase.resx">
-      <DependentUpon>202107111600061_CreateDatabase.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107120540182_CreateDatabase.resx">
+      <DependentUpon>202107120540182_CreateDatabase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202107111600272_InsertBaseData.resx">
-      <DependentUpon>202107111600272_InsertBaseData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202107120540404_InsertBaseData.resx">
+      <DependentUpon>202107120540404_InsertBaseData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

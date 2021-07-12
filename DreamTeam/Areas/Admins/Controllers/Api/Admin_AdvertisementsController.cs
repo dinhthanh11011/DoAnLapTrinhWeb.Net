@@ -63,6 +63,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 var data = HttpContext.Current.Request.Form;
                 var id = int.Parse(data.Get("Id"));
                 var title = data.Get("Title");
+                var link = data.Get("Link");
                 var description = data.Get("Description");
                 var active = data.Get("Active");
                 var ordering = int.Parse(data.Get("Ordering"));
@@ -81,6 +82,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 }
                 ob.Active = active.Contains("true");
                 ob.Title = title;
+                ob.Link = link;
                 ob.Description = description;
                 ob.Ordering = ordering;
                 db.SaveChanges();
@@ -102,6 +104,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 if (files != null)
                 {
                     var title = HttpContext.Current.Request.Form.Get("Title");
+                    var link = HttpContext.Current.Request.Form.Get("Link");
                     var des = HttpContext.Current.Request.Form.Get("Description");
                     for (int i = 0; i < files.Count; i++)
                     {
@@ -112,6 +115,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                             Image = fileUp.fileName,
                             Active =true,
                             Title = title,
+                            Link = link,
                             Description = des,
                             Ordering = db.Advertisements.Select(x => x.Ordering).DefaultIfEmpty(0).Max() + 1
                         });

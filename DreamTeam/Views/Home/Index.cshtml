@@ -1,14 +1,162 @@
-﻿@model IEnumerable<DreamTeam.Models.Store.InvoiceDetail>
-@{
-    ViewBag.Title = "Home Page";
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form action="/api/client_invoices" method="post">
+<!-- collection -->
+<section class="section collection" id="collection">
+    <div class="container">
+        <div class="collection__container">
+            <div class="collection__box">
+                <div class="img__container">
+                    <img src="./image/collection_02.png" class="collection__02">
+                </div>
+                <div class="collection__content">
+                    <div class="collection__data">
+                        <span>New Colors Introduced</span>
+                        <h1>HEADSPHONE</h1>
+                        <a href="#">SHOP NOW</a>
+                    </div>
+                </div>
+            </div>
+            <div class="collection__box">
+                <div class="img__container">
+                    <img src="./image/collection_01.png" class="collection__01">
+                </div>
+                <div class="collection__content">
+                    <div class="collection__data">
+                        <span>Phone Device Preset</span>
+                        <h1>SMARTPHONES</h1>
+                        <a href="#">SHOP NOW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Latest Product -->
+<div class="container">
+    <section class="section latest__products" id="latest">
+        <div class="title__container">
+            <div class="section__title active" data-id="Latest Products">
+                <span class="dot"></span>
+                <h1 class="primary__title">Latest Products</h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="glide" id="glide_2">
+                <div class="glide__track" data-glide-el="track">
+                    <ul class="glide__slides latest-center">
+                        @{
+                            bool flag = false;
+                            foreach (var item in ViewBag.ProductsNew)
+                            {
+                                flag = true;
+                                <li class="glide__slide">
+                                    <div class="product">
+                                        <div class="product__header">
+                                            <img src="@item.GetType().GetProperty("Avatar").GetValue(@item, null)" alt="@item.GetType().GetProperty("Name").GetValue(@item, null)">
+                                        </div>
+                                        <div class="product__footer">
+                                            <h3>@item.GetType().GetProperty("Name").GetValue(@item, null)</h3>
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="product__price">
+                                                <h4>@item.GetType().GetProperty("CurrentPrice").GetValue(@item, null) VND</h4>
+                                                <button type="button" class="product__btn " data-product-id="@item.GetType().GetProperty("Id").GetValue(@item, null)">
+                                                    Add To Cart
+                                                </button>
+                                            </div>
+                                            <ul>
+                                                <a href="">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="">
+                                                    <i class="fas fa-heart"></i>
+                                                </a>
+                                                <a href="">
+                                                    <i class="fas fa-undo"></i>
+                                                </a>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                            if (!flag)
+                            {
+                                <li></li>
 
-    <input type="hidden" name="InvoiceDetail[0].ProductId" value="453453" />
-    <input type="hidden" name="InvoiceDetail[0].Quantity" value="78" />
-    <input type="hidden" name="InvoiceDetail[0].Price" value="21" />
+                            }
+                        }
+                    </ul>
+                </div>
 
+                <div class="glide__arrows" data-glide-el="controls">
+                    <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Category Center -->
+    <section class="category__section section" id="category">
+        <div class="tab__list">
+            <div class="title__container tabs">
+                <div class="section__titles category__titles">
+                    <div class="section__title filter-btn active" data-id="All Products">
+                        <span class="dot"></span>
+                        <h1 class="primary__title">All Products</h1>
+                    </div>
+                </div>
+                <div class="section__titles ">
+                    <div class="section__title filter-btn" data-id="Trending Products">
+                        <span class="dot"></span>
+                        <h1 class="primary__title">Trending Products</h1>
+                    </div>
+                </div>
+                <div class="section__titles ">
+                    <div class="section__title filter-btn" data-id="Special Products">
+                        <span class="dot"></span>
+                        <h1 class="primary__title">Special Products</h1>
+                    </div>
+                </div>
+                <div class="section__titles ">
+                    <div class="section__title filter-btn" data-id="Featured Products">
+                        <span class="dot"></span>
+                        <h1 class="primary__title">Featured Products</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="category__contaier">
+                <div class="catgory__center">
 
-    <button type="submit">submit</button>
-</form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            let routeCart = "api/Client_Carts/"
+            $(document).on("click", ".product__btn", (e) => {
+                e.preventDefault()
+                $.ajax({
+                    url: routeCart + $(e.target).attr("data-product-id"),
+                    method: "POST",
+                }).done(() => alert("Da them vao gio hang"))
+                    .fail(err => alert(err.responseJSON.Message))
+            })
+        })
+    </script>    
+}

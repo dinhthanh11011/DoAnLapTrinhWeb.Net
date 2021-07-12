@@ -15,12 +15,11 @@ namespace DreamTeam.Models
     {
         
         public ICollection<Address> Addresses{ get; set; }
-        public ICollection<Product.Product> Carts{ get; set; }
+        public ICollection<Cart> Carts{ get; set; }
         public ICollection<Comment> Comments{ get; set; }
 
         public ApplicationUser()
         {
-            Carts = new Collection<Product.Product>();
         }
 
         [Required]

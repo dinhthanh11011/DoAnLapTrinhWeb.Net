@@ -19,6 +19,11 @@
             </div>
 
             <div class="form-group">
+                @Html.LabelFor(x => x.Link)
+                <input type="text" required name="Title" class="form-control" value="@Model.Link" />
+            </div>
+
+            <div class="form-group">
                 @Html.LabelFor(x => x.Description)
                 <textarea rows="3" required name="Description" class="form-control">@Model.Description</textarea>
             </div>

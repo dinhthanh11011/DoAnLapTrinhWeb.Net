@@ -1,0 +1,48 @@
+﻿
+<div class="hero">
+    <div class="glide" id="glide_1">
+        <div class="glide__track" data-glide-el="track">
+            <ul class="glide__slides" id="glide__slides">
+                @if (ViewBag.Advertisements == null)
+                {
+                    <li></li>
+                }
+                @foreach (var item in ViewBag.Advertisements)
+                {
+                    <li class="glide__slide">
+                        <div class="hero__center">
+                            <div class="hero__left">
+                                <h1>@item.GetType().GetProperty("Title").GetValue(@item, null)</h1>
+                                <P>@item.GetType().GetProperty("Description").GetValue(@item, null)</P>
+                                <a href="@item.GetType().GetProperty("Link").GetValue(@item, null)" class="hero__btn">SHOP NOW</a>
+                            </div>
+                            <div class="hero__right">
+                                <div class="her__img-container">
+                                    <img src="@item.GetType().GetProperty("Image").GetValue(@item, null)" alt="" class="">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+            </ul>
+        </div>
+        <div class="glide__bullets" data-glide-el="controls[nav]">
+            @{
+                int i = 0;
+                foreach (var item in ViewBag.Advertisements)
+                {
+                    <button class="glide__bullet" data-glide-dir="=@i++"></button>
+                }
+            }
+        </div>
+        <div class="glide__arrows" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

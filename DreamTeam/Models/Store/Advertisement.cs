@@ -26,6 +26,11 @@ namespace DreamTeam.Models.Store
         public string Description { get; set; }
 
         [Required]
+        [StringLength(255)]
+        [Display(Name = "Đường Dẫn")]
+        public string Link { get; set; }
+
+        [Required]
         [Display(Name = "Trạng Thái")]
         public bool Active { get; set; }
 
