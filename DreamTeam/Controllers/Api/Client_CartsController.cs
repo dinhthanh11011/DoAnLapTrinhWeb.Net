@@ -24,7 +24,7 @@ namespace DreamTeam.Controllers.Api
         public dynamic GetCarts()
         {
             string userId = User.Identity.GetUserId();
-            return db.Users.Find(userId).Carts.OrderBy(x=>x.Product.Ordering).Where(x => x.Product.Active == true).Select(x=>new {
+            return db.Carts.OrderBy(x => x.Product.Ordering).Where(x => x.Product.Active == true && x.CustomerId == userId).Select(x=>new {
                 x.Product.Id,x.Product.Name,x.Product.Quantity,x.Product.OldPrice,x.Product.CurrentPrice,
                 Avatar = x.Product.Product_Imgs.OrderBy(z => z.Ordering).Select(z => support.UPLOAD_FOLDER_NAME + "/" + z.Name).FirstOrDefault()
             });

@@ -24,7 +24,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
         // GET: api/Admin_Categories
         public dynamic GetCategories()
         {
-            return db.Categories.Select(x=>new { x.Id,x.Name,x.Ordering,x.Active,x.Avatar,AttributeCount = x.Attributes.Count, Brand = x.Brand.Name}).OrderBy(x=>x.Ordering);
+            return db.Categories.Select(x=>new { x.Id,x.Name,x.Ordering,x.Active, Avatar = support.UPLOAD_FOLDER_NAME + "/" + x.Avatar,AttributeCount = x.Attributes.Count, Brand = x.Brand.Name}).OrderBy(x=>x.Ordering);
         }
 
         // GET: api/Admin_Categories/5

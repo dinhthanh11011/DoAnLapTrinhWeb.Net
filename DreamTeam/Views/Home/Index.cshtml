@@ -2,161 +2,184 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- collection -->
-<section class="section collection" id="collection">
+<!-- Start Categories  -->
+<div class="categories-shop">
     <div class="container">
-        <div class="collection__container">
-            <div class="collection__box">
-                <div class="img__container">
-                    <img src="./image/collection_02.png" class="collection__02">
+        <div style="display:flex;flex-direction:row;flex-wrap:nowrap;overflow:auto;" id="Client_Categories">
+            
+        </div>
+    </div>
+</div>
+<!-- End Categories -->
+
+<div class="products-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>Featured Products</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
                 </div>
-                <div class="collection__content">
-                    <div class="collection__data">
-                        <span>New Colors Introduced</span>
-                        <h1>HEADSPHONE</h1>
-                        <a href="#">SHOP NOW</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="special-menu text-center">
+                    <div class="button-group filter-button-group" id="Client_brands">
+                        <button class="active" data-filter="*">All</button>
+                        <button data-filter=".top-featured">Top featured</button>
+                        <button data-filter=".best-seller">Best seller</button>
                     </div>
                 </div>
             </div>
-            <div class="collection__box">
-                <div class="img__container">
-                    <img src="./image/collection_01.png" class="collection__01">
+        </div>
+
+        <div class="row special-list">
+            <div class="col-lg-3 col-md-6 special-grid best-seller">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+                        <div class="type-lb">
+                            <p class="sale">Sale</p>
+                        </div>
+                        <img src="~/public/images/img-pro-01.jpg" class="img-fluid" alt="Image">
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                            </ul>
+                            <a class="cart" href="#">Add to Cart</a>
+                        </div>
+                    </div>
+                    <div class="why-text">
+                        <h4>Lorem ipsum dolor sit amet</h4>
+                        <h5> $7.79</h5>
+                    </div>
                 </div>
-                <div class="collection__content">
-                    <div class="collection__data">
-                        <span>Phone Device Preset</span>
-                        <h1>SMARTPHONES</h1>
-                        <a href="#">SHOP NOW</a>
+            </div>
+
+            <div class="col-lg-3 col-md-6 special-grid top-featured">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+                        <div class="type-lb">
+                            <p class="new">New</p>
+                        </div>
+                        <img src="~/public/images/img-pro-02.jpg" class="img-fluid" alt="Image">
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                            </ul>
+                            <a class="cart" href="#">Add to Cart</a>
+                        </div>
+                    </div>
+                    <div class="why-text">
+                        <h4>Lorem ipsum dolor sit amet</h4>
+                        <h5> $9.79</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 special-grid top-featured">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+                        <div class="type-lb">
+                            <p class="sale">Sale</p>
+                        </div>
+                        <img src="~/public/images/img-pro-03.jpg" class="img-fluid" alt="Image">
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                            </ul>
+                            <a class="cart" href="#">Add to Cart</a>
+                        </div>
+                    </div>
+                    <div class="why-text">
+                        <h4>Lorem ipsum dolor sit amet</h4>
+                        <h5> $10.79</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 special-grid best-seller">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+                        <div class="type-lb">
+                            <p class="sale">Sale</p>
+                        </div>
+                        <img src="~/public/images/img-pro-04.jpg" class="img-fluid" alt="Image">
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                            </ul>
+                            <a class="cart" href="#">Add to Cart</a>
+                        </div>
+                    </div>
+                    <div class="why-text">
+                        <h4>Lorem ipsum dolor sit amet</h4>
+                        <h5> $15.79</h5>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
-<!-- Latest Product -->
-<div class="container">
-    <section class="section latest__products" id="latest">
-        <div class="title__container">
-            <div class="section__title active" data-id="Latest Products">
-                <span class="dot"></span>
-                <h1 class="primary__title">Latest Products</h1>
-            </div>
-        </div>
-        <div class="container">
-            <div class="glide" id="glide_2">
-                <div class="glide__track" data-glide-el="track">
-                    <ul class="glide__slides latest-center">
-                        @{
-                            bool flag = false;
-                            foreach (var item in ViewBag.ProductsNew)
-                            {
-                                flag = true;
-                                <li class="glide__slide">
-                                    <div class="product">
-                                        <div class="product__header">
-                                            <img src="@item.GetType().GetProperty("Avatar").GetValue(@item, null)" alt="@item.GetType().GetProperty("Name").GetValue(@item, null)">
-                                        </div>
-                                        <div class="product__footer">
-                                            <h3>@item.GetType().GetProperty("Name").GetValue(@item, null)</h3>
-                                            <div class="rating">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="product__price">
-                                                <h4>@item.GetType().GetProperty("CurrentPrice").GetValue(@item, null) VND</h4>
-                                                <button type="button" class="product__btn " data-product-id="@item.GetType().GetProperty("Id").GetValue(@item, null)">
-                                                    Add To Cart
-                                                </button>
-                                            </div>
-                                            <ul>
-                                                <a href="">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <a href="">
-                                                    <i class="fas fa-undo"></i>
-                                                </a>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                            }
-                            if (!flag)
-                            {
-                                <li></li>
-
-                            }
-                        }
-                    </ul>
-                </div>
-
-                <div class="glide__arrows" data-glide-el="controls">
-                    <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Category Center -->
-    <section class="category__section section" id="category">
-        <div class="tab__list">
-            <div class="title__container tabs">
-                <div class="section__titles category__titles">
-                    <div class="section__title filter-btn active" data-id="All Products">
-                        <span class="dot"></span>
-                        <h1 class="primary__title">All Products</h1>
-                    </div>
-                </div>
-                <div class="section__titles ">
-                    <div class="section__title filter-btn" data-id="Trending Products">
-                        <span class="dot"></span>
-                        <h1 class="primary__title">Trending Products</h1>
-                    </div>
-                </div>
-                <div class="section__titles ">
-                    <div class="section__title filter-btn" data-id="Special Products">
-                        <span class="dot"></span>
-                        <h1 class="primary__title">Special Products</h1>
-                    </div>
-                </div>
-                <div class="section__titles ">
-                    <div class="section__title filter-btn" data-id="Featured Products">
-                        <span class="dot"></span>
-                        <h1 class="primary__title">Featured Products</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="category__contaier">
-                <div class="catgory__center">
-
-                </div>
-            </div>
-        </div>
-    </section>
 </div>
+
 
 @section scripts
 {
     <script>
         $(document).ready(() => {
             let routeCart = "api/Client_Carts/"
-            $(document).on("click", ".product__btn", (e) => {
-                e.preventDefault()
+            let routeCategory = "api/Client_Categories/"
+            let routeProducts = "api/Client_products/"
+            let routeBrands = "api/Client_brands/"
+
+            loadCategories()
+
+            function loadCategories() {
                 $.ajax({
-                    url: routeCart + $(e.target).attr("data-product-id"),
-                    method: "POST",
-                }).done(() => alert("Da them vao gio hang"))
-                    .fail(err => alert(err.responseJSON.Message))
-            })
-        })
-    </script>    
+                    url: routeCategory,
+                    method: "GET"
+                }).done(data => {
+                    $("#Client_Categories div").remove()
+                    data.forEach(item => {
+                        $("#Client_Categories").append(`
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="shop-cat-box">
+                                            <img class="img-fluid" src="${item.Avatar}" alt="${item.Name}" />
+                                            <a class="btn hvr-hover" href="#">${item.Name}</a>
+                                        </div>
+                                    </div>
+                                `)
+                    })
+
+                })
+            }
+
+            function loadBrands() {
+                $.ajax({
+                    url: routeCategory,
+                    method: "GET"
+                }).done(data => {
+                    $("#Client_brands button").remove()
+                    data.forEach(item => {
+                        $("#Client_brands").append(`
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="shop-cat-box">
+                                            <img class="img-fluid" src="${item.Avatar}" alt="${item.Name}" />
+                                            <a class="btn hvr-hover" href="#">${item.Name}</a>
+                                        </div>
+                                    </div>
+                                `)
+                    })
+
+                })
+            }
+    </script>
 }

@@ -2,23 +2,34 @@
 @{
     Layout = null;
 }
+
+
 <!DOCTYPE html>
 <html lang="en">
+<!-- Basic -->
+
 <head>
     @RenderPage("ChildPageLayout/Head.cshtml")
 </head>
+
 <body>
-    <header class="header" id="header">
-        <!-- Nav -->
-        @RenderPage("ChildPageLayout/Nav.cshtml")
-        <!-- Hero Area -->
-        @RenderPage("ChildPageLayout/Advertisement.cshtml")
-    </header>
-    <!-- Main -->
-    <main id="main">
-        @RenderBody()
-    </main>
+    <!-- Start Main Top -->
+    @RenderPage("ChildPageLayout/Nav.cshtml")
+    <!-- End Start Main Top -->
+    <!-- Start Slider -->
+    @RenderPage("ChildPageLayout/Advertisement.cshtml")
+    <!-- End Slider -->
+    
+    <!-- Start Products  -->
+    @RenderBody()
+    <!-- End Products  -->
+    <!-- Start Footer  -->
+    @RenderPage("ChildPageLayout/Footer.cshtml")
+    <!-- End Footer  -->
+    
     @RenderPage("ChildPageLayout/Scripts.cshtml")
-    @RenderSection("scripts", false);
+    @RenderSection("scripts", false)
+    
 </body>
+
 </html>
