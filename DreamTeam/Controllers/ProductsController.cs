@@ -21,9 +21,9 @@ namespace DreamTeam.Controllers
         public ActionResult Index()
         {
             Product_Index_Object pro = new Product_Index_Object();
-            pro.Products = db.Products.Include(x => x.Category).Include(x => x.Category.Brand).Include(x => x.Product_Imgs).ToList();
-            pro.Categories = db.Categories.OrderBy(x => x.Ordering).ToList();
-            pro.Brands = db.Brands.OrderBy(x => x.Ordering).ToList();
+            pro.Products = Product_Handle.getAll();
+            pro.Categories = Category_Handle.getAll();
+            pro.Brands = Brand_Handle.getAll();
             return View(pro);
         }
 
@@ -34,12 +34,7 @@ namespace DreamTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products
-                .Include(x=>x.Category)
-                .Include(x=>x.Category.Brand)
-                .Where(x=>x.Id==id)
-                .Include(x=>x.Product_Imgs)
-                .Include(x=>x.Product_Attributes).FirstOrDefault();
+            Product product = Product_Handle.getOne((int)id);
             if (product == null)
             {
                 return HttpNotFound();

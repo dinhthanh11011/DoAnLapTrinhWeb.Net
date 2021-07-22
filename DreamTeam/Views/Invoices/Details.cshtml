@@ -68,7 +68,7 @@
                         long sum = 0;
                         foreach (var item in Model.InvoiceDetails)
                         {
-                            sum += item.Price;
+                            sum += item.Price * item.Quantity;
                         }
                         <td><label>Tổng Giá Trị Đơn Hàng</label></td>
                         <td>@Convert.ToDecimal(sum).ToString("#,##") VND</td>
@@ -134,7 +134,7 @@
                     method: "DELETE"
                 }).done(() => {
                     sendMessage("Đã hủy đơn hàng!", "done")
-                    window.location = "/"
+                    window.location = "/Invoices"
                 }).fail(err => {
                     sendMessage(err.responseJSON.Message, "fail")
                 })

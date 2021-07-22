@@ -23,17 +23,17 @@
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td><label>Ngày Lập </label></td>
+                        <td>Ngày Lập</td>
                         <td>@Model.Invoice.CreateAt</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td><label>Trạng Thái Đơn Hàng </label></td>
+                        <td>Trạng Thái Đơn Hàng </td>
                         <td>@Html.DisplayFor(x => x.Invoice.InvoiceStatus.Name)</td>
                     </tr>
                     <tr>
                         <th scope="row">3</th>
-                        <td><label>Trạng Thái Thanh Toán </label></td>
+                        <td>Trạng Thái Thanh Toán </td>
                         <td>
                             @if (Model.Invoice.IsPayed)
                             {
@@ -47,17 +47,17 @@
                     </tr>
                     <tr>
                         <th scope="row">4</th>
-                        <td><label>Người Nhận Hàng</label></td>
+                        <td>Người Nhận Hàng</td>
                         <td>@Html.DisplayFor(x => x.Invoice.Person)</td>
                     </tr>
                     <tr>
                         <th scope="row">5</th>
-                        <td><label>Số Điện Thoại</label></td>
+                        <td>Số Điện Thoại</td>
                         <td>@Html.DisplayFor(x => x.Invoice.Phone)</td>
                     </tr>
                     <tr>
                         <th scope="row">6</th>
-                        <td><label>Địa Chỉ</label></td>
+                        <td>Địa Chỉ</td>
                         <td>@Html.DisplayFor(x => x.Invoice.Location)</td>
                     </tr>
                     <tr>
@@ -67,9 +67,9 @@
                             long sum = 0;
                             foreach (var item in Model.InvoiceDetails)
                             {
-                                sum += item.Price;
+                                sum += item.Price * item.Quantity;
                             }
-                            <td><label>Tổng Giá Trị Đơn Hàng</label></td>
+                            <td>Tổng Giá Trị Đơn Hàng</td>
                             <td>@Convert.ToDecimal(sum).ToString("#,##") VND</td>
                         }
                     </tr>
@@ -77,41 +77,39 @@
             </table>
 
         </div>
+        <div class="card-header">
+            <h3 class="card-title">Danh Sách Sản Phẩm</h3>
+        </div>
         <div class="card card-primary m-2">
-            <div class="card-header">
-                <h3 class="card-title">Danh Sách Sản Phẩm</h3>
-            </div>
-            <div class="card card-primary m-2">
 
-                    <table class="table">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Mã Sản Phẩm</th>
-                                <th scope="col">Tên Sản Phẩm</th>
-                                <th scope="col">Avatar</th>
-                                <th scope="col">Số Lượng</th>
-                                <th scope="col">Đơn Giá</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.InvoiceDetails)
-                            {
-                                <tr>
-                                    <td>@item.ProductId</td>
-                                    <td>@item.Product.Name</td>
-                                    <td>
-                                        @if (@item.Product.Product_Imgs.FirstOrDefault() != null)
-                                        {
-                                            <img class="img-fluid" width="150px" src="~/Uploads/@item.Product.Product_Imgs.First().Name" />
-                                        }
-                                    </td>
-                                    <td>@item.Quantity</td>
-                                    <td>@item.Price</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-            </div>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Mã Sản Phẩm</th>
+                        <th scope="col">Tên Sản Phẩm</th>
+                        <th scope="col">Avatar</th>
+                        <th scope="col">Số Lượng</th>
+                        <th scope="col">Đơn Giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.InvoiceDetails)
+                    {
+                        <tr>
+                            <td>@item.ProductId</td>
+                            <td>@item.Product.Name</td>
+                            <td>
+                                @if (@item.Product.Product_Imgs.FirstOrDefault() != null)
+                                {
+                                    <img class="img-fluid" width="150px" src="~/Uploads/@item.Product.Product_Imgs.First().Name" />
+                                }
+                            </td>
+                            <td>@item.Quantity</td>
+                            <td>@Convert.ToDecimal(@item.Price).ToString("#,##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
 
     </div>

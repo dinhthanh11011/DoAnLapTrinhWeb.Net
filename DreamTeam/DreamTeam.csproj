@@ -208,7 +208,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\Api\Client_AddressesController.cs" />
-    <Compile Include="Controllers\Api\Client_AdvertisementsController.cs" />
     <Compile Include="Controllers\Api\Client_BrandsController.cs" />
     <Compile Include="Controllers\Api\Client_CartsController.cs" />
     <Compile Include="Controllers\Api\Client_CategoriesController.cs" />
@@ -224,7 +223,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Handle\Advertisements_Handle.cs" />
+    <Compile Include="Handle\Advertisement_Handle.cs" />
+    <Compile Include="Handle\Brand_Handle.cs" />
+    <Compile Include="Handle\Category_Handle.cs" />
     <Compile Include="Handle\Product_Handle.cs" />
     <Compile Include="Migrations\202107221532344_CreateDatabase.cs" />
     <Compile Include="Migrations\202107221532344_CreateDatabase.Designer.cs">

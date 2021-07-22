@@ -17,7 +17,7 @@ namespace DreamTeam.Support
         public const string STORE_MANAGE_PERMISSION = "store_manager";
 
 
-        private static string removeVietnameseTone(string text)
+        public static string removeVietnameseTone(string text)
         {
             string result = text.Trim().ToLower();
             result = Regex.Replace(result, "à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ|/g", "a");

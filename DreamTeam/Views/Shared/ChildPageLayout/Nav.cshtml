@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     Layout = null;
 }
 
@@ -26,12 +27,22 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">My Account</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/Carts">Cart</a></li>
-                                <li><a href="/Addresses">Addresses</a></li>
-                                <li><a href="/Invoices">Invoices</a></li>
-                            </ul>
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@User.Identity.Name</a>
+
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                        <ul class="dropdown-menu">
+                            <li>
+                                @Html.ActionLink("My Account", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                            </li>
+                            <li><a href="/Carts">Cart</a></li>
+                            <li><a href="/Addresses">Addresses</a></li>
+                            <li><a href="/Invoices">Invoices</a></li>
+                            <li><a href="/Manage/ChangePassword">ChangePassword</a></li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        </ul>
+                            }
                         </li>
                     }
                 </ul>
@@ -40,7 +51,6 @@
             <!-- Start Atribute Navigation -->
             <div class="attr-nav">
                 <ul>
-                    <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
                     @if (!User.Identity.IsAuthenticated)
                     {
                         <li><a href="/Account/Login">Login</a></li>
@@ -53,17 +63,7 @@
     <!-- End Navigation -->
 </header>
 <!-- End Main Top -->
-<!-- Start Top Search -->
-<div class="top-search">
-    <div class="container">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            <input type="text" class="form-control" placeholder="Search">
-            <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
-        </div>
-    </div>
-</div>
-<!-- End Top Search -->
+
 <div class="alert"
      id="message"
      style="position: fixed;width:100vw;z-index:1"

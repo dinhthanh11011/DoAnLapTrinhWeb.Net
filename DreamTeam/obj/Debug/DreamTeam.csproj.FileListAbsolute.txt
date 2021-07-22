@@ -114,3 +114,4 @@ D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.csproj.CoreCompileInputs.cach
 D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.csproj.CopyComplete
 D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.dll
 D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.pdb
+D:\CODE\C#\DreamTeam\DreamTeam\obj\Debug\DreamTeam.csprojAssemblyReference.cache

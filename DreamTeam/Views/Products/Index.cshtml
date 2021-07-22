@@ -5,8 +5,8 @@
             <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
                 <div class="product-categori">
                     <div class="search-product">
-                        <form action="#">
-                            <input class="form-control" placeholder="Search here..." type="text">
+                        <form action="" id="form_search">
+                            <input class="form-control" placeholder="Search here..." id="searchKey" type="text">
                             <button type="submit"> <i class="fa fa-search"></i> </button>
                         </form>
                     </div>
@@ -70,7 +70,7 @@
 @section scripts{
     <script>
         $(document).ready(() => {
-            let route_pro_all = "/api/Client_Products/"
+            let route_pro_all = "/api/Client_Products"
             let route_pro_cate = "/api/Client_Categories/"
             let route_pro_brand = "/api/Client_Brands/"
 
@@ -126,6 +126,20 @@
             $(".btn_pro_all").on("click", (e) => {
                 e.preventDefault()
                 loadProduct_all()
+            })
+
+            $("#form_search").on("submit", (e) => {
+                e.preventDefault()
+                $.ajax({
+                    url: route_pro_all,
+                    method: "GET",
+                    data: { searchKey: $("#searchKey").val()}
+                }).done(data => {
+                    $("#pro_list div").remove()
+                    data.forEach(item => {
+                        $("#pro_list").append(createPro(item))
+                    })
+                })
             })
 
             function createPro(item) {
