@@ -21,10 +21,7 @@ namespace DreamTeam.Controllers.Api
         // GET: api/Client_Products
         public dynamic GetProducts()
         {
-            return db.Products.OrderBy(x=>x.Ordering).Where(x => x.Active == true).Select(x=>new { 
-                x.Id,x.Name,x.Quantity,x.OldPrice,x.CurrentPrice,
-                Avatar = x.Product_Imgs.OrderBy(z=>z.Ordering).Select(z=> support.UPLOAD_FOLDER_NAME + "/" + z.Name ).FirstOrDefault()
-            }).ToList();
+            return Handle.Product_Handle.getAll();
         }
 
         // GET: api/Client_Products/5
@@ -37,6 +34,9 @@ namespace DreamTeam.Controllers.Api
                 x.Quantity,
                 x.OldPrice,
                 x.CurrentPrice,
+                x.Hot,
+                x.New,
+                Brand = x.Category.Brand.Name,
                 Attributes = x.Product_Attributes.OrderBy(y => y.Attribute.Ordering).Select(y => new { Name = y.Attribute.Name, Value = y.Value }),
                 Images = x.Product_Imgs.OrderBy(z => z.Ordering).Select(z => new { Name = support.UPLOAD_FOLDER_NAME + "/" + z.Name }).ToList()
             }).FirstOrDefault();

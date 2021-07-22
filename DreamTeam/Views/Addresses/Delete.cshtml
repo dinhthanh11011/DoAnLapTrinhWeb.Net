@@ -1,0 +1,58 @@
+﻿@model DreamTeam.Models.Account.Address
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thông Tin Địa Chỉ</h3>
+    </div>
+
+    <div class="card card-primary m-2">
+        <div class="card-body">
+            <div class="form-group my-2">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color my-2">
+                        <input type="submit" value="Delete" class="btn btn-danger" style="width:120px;" /> 
+                    </div>
+                }
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Thông Tin</th>
+                            <th scope="col">Giá Trị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <th>@Html.LabelFor(model => model.Person, htmlAttributes: new { @class = "control-label" })</th>
+                            <th>@Html.DisplayFor(model => model.Person, new { htmlAttributes = new { @class = "form-control" } })</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <th>@Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })</th>
+                            <th>@Html.DisplayFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <th>@Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label" })</th>
+                            <th>@Html.DisplayFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+
+    
+</div>

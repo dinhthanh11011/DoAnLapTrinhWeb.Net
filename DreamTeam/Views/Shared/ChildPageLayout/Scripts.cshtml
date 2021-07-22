@@ -13,7 +13,7 @@
 <script src="~/public/js/jquery.superslides.min.js"></script>
 <script src="~/public/js/bootstrap-select.js"></script>
 <script src="~/public/js/inewsticker.js"></script>
-<script src="~/public/js/bootsnav.js."></script>
+<script src="~/public/js/bootsnav.js"></script>
 <script src="~/public/js/images-loded.min.js"></script>
 <script src="~/public/js/isotope.min.js"></script>
 <script src="~/public/js/owl.carousel.min.js"></script>
@@ -21,3 +21,15 @@
 <script src="~/public/js/form-validator.min.js"></script>
 <script src="~/public/js/contact-form-script.js"></script>
 <script src="~/public/js/custom.js"></script>
+<script src="~/Areas/Admins/public/support/support.js"></script>
+
+<script>
+    $(document).ready(() => {
+        $.ajax({
+            url: "/api/client_logos",
+            method:"GET"
+        }).done(data => {
+            $("#main__logo").attr("src",data.Name)
+        })
+    })
+</script>

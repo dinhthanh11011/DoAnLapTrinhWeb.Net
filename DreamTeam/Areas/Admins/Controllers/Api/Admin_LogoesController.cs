@@ -24,7 +24,10 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
         public dynamic GetLogos()
         {
             var data = db.Logos.ToList();
-            data[0].Name = support.UPLOAD_FOLDER_NAME + "/" + data[0].Name;
+            if (data.Count > 0)
+            {
+                data[0].Name = support.UPLOAD_FOLDER_NAME + "/" + data[0].Name;
+            }
             return data;
         }
 

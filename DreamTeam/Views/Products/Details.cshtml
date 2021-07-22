@@ -1,0 +1,145 @@
+﻿@model DreamTeam.Models.Product.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="shop-detail-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-5 col-lg-5 col-md-6">
+                <div id="carousel-example-1" class="single-product-slider carousel slide" data-ride="carousel">
+                    <div class="carousel-inner" role="listbox" >
+                        @foreach (var item in Model.Product_Imgs)
+                        {
+                            var ac = "";
+                            if (item.Ordering == 1)
+                            {
+                                ac = "active";
+                            }
+                            <div class="carousel-item @ac"> <img class="d-block img-fluid" src="/Uploads/@item.Name" alt="@Model.Name"> </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#carousel-example-1" role="button" data-slide="prev">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-example-1" role="button" data-slide="next">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    <ol class="carousel-indicators">
+                        @foreach (var item in Model.Product_Imgs)
+                        {
+                            <li data-target="#carousel-example-1" data-slide-to="@item.Ordering-1" class="">
+                                <img class="d-block img-fluid" src="/Uploads/@item.Name" alt="@Model.Name">
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+            <div class="col-xl-7 col-lg-7 col-md-6">
+                <div class="single-product-details">
+                    <h2>@Model.Name</h2>
+                    <h5> <del>@Convert.ToDecimal(Model.OldPrice).ToString("#,##") VND</del> @Convert.ToDecimal(Model.CurrentPrice).ToString("#,##") VND</h5>
+                    <p class="available-stock">
+                        @if (Model.New)
+                        {
+                            <span>Sản Phẩm Nỗi Bật</span>
+                        }
+                    </p>
+
+                    <div class="price-box-bar">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="cart-and-bay-btn">
+                                <a class="btn hvr-hover" id="btnAddToCart" data-product-id="@Model.Id" href="#">Add to cart</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <span>Đăng nhập để có thể đặt hàng</span>
+                        }
+                    </div>
+                    
+
+                    <p>
+                        <div data-product-id="@Model.Id">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Thuộc Tính</th>
+                                        <th scope="col">Giá Trị</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tb_list" data-product-id="@Model.Id">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Thương Hiệu</td>
+                                        <td>@Model.Category.Brand.Name</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Loại Sản Phẩm</td>
+                                        <td>@Model.Category.Name</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>Số Lượng</td>
+                                        <td>@Model.Quantity</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            let route_pro_attr = "/api/Client_Products/"
+            let route_cart = "/api/Client_Carts/"
+
+            $.ajax({
+                url: route_pro_attr + $("#tb_list").attr("data-product-id"),
+                method: "GET"
+            }).done(data => {
+                if (data.Attributes.length > 0) {
+                    loadAttrs(data)
+                }
+            })
+
+
+            function loadAttrs(data) {
+                data.Attributes.forEach((item, index) => {
+                    $("#tb_list").append(`
+                                    <tr>
+                                        <th scope="row">${index + 4}</th>
+                                        <td>${item.Name}</td>
+                                        <td>${item.Value}</td>
+                                    </tr>
+                                `)
+                })
+            }
+
+            $("#btnAddToCart").on("click", (e) => {
+                e.preventDefault()
+                $.ajax({
+                    url: route_cart + $(e.target).attr("data-product-id"),
+                    method: "POST"
+                }).done(() => {
+                    sendMessage("Đã thêm sản phẩm vào giỏ hàng!", "done")
+                }).fail(err => {
+                    sendMessage(err.responseJSON.Message, "fail")
+                })
+            })
+        })
+    </script>
+}

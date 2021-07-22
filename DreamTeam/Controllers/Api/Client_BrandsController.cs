@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Data.Entity;
 
 namespace DreamTeam.Controllers.Api
 {
@@ -19,24 +20,10 @@ namespace DreamTeam.Controllers.Api
         }
 
         // GET: api/Client_Brands/5
-        public string Get(int id)
+        public dynamic Get(int id)
         {
-            return "value";
+            return db.Products.Include(x => x.Product_Imgs).Where(x => x.Category.BrandId == id).OrderBy(x => x.Ordering).ToList();
         }
 
-        // POST: api/Client_Brands
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Client_Brands/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Client_Brands/5
-        public void Delete(int id)
-        {
-        }
     }
 }

@@ -1,0 +1,168 @@
+﻿@model DreamTeam.ViewModels.Product_Index_Object
+<div class="shop-box-inner">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
+                <div class="product-categori">
+                    <div class="search-product">
+                        <form action="#">
+                            <input class="form-control" placeholder="Search here..." type="text">
+                            <button type="submit"> <i class="fa fa-search"></i> </button>
+                        </form>
+                    </div>
+                    <div class="filter-sidebar-left">
+                        <div class="title-left">
+                            <h3>Categories</h3>
+                        </div>
+                        <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men" data-children=".sub-men">
+                            <div class="list-group-collapse sub-men">
+                                <a class="list-group-item list-group-item-action btn_pro_all" href="">
+                                    All
+                                </a>
+                                @foreach (var item in Model.Categories)
+                                {
+                                    <a class="list-group-item list-group-item-action btn_cate" data-cate-id="@item.Id" href="">
+                                        @item.Name @item.Brand.Name
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-brand-left">
+                        <div class="title-left">
+                            <h3>Brand</h3>
+                        </div>
+                        <div class="brand-box" tabindex="1" style="overflow: hidden; outline: none;">
+                            <ul>
+                                <a class="list-group-item list-group-item-action btn_pro_all">
+                                    All
+                                </a>
+                                @foreach (var item in Model.Brands)
+                                {
+                                    <a class="list-group-item list-group-item-action btn_brand" data-brand-id="@item.Id" href="">
+                                        @item.Name
+                                    </a>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+                <div class="right-product-box">
+
+                    <div class="row product-categorie-box">
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
+                                <div class="row" id="pro_list">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(() => {
+            let route_pro_all = "/api/Client_Products/"
+            let route_pro_cate = "/api/Client_Categories/"
+            let route_pro_brand = "/api/Client_Brands/"
+
+            loadProduct_all()
+            function loadProduct_all() {
+                $.ajax({
+                    url: route_pro_all,
+                    method: "GET"
+                }).done(data => {
+                    $("#pro_list div").remove()
+                    data.forEach(item => {
+                        $("#pro_list").append(createPro(item))
+                    })
+                })
+            }
+
+            function loadProduct_cate(cateId) {
+                $.ajax({
+                    url: route_pro_cate + cateId,
+                    method: "GET"
+                }).done(data => {
+                    $("#pro_list div").remove()
+                    data.forEach(item => {
+                        $("#pro_list").append(createPro(item))
+                    })
+                })
+            }
+
+            function loadProduct_brand(branđI) {
+                $.ajax({
+                    url: route_pro_cate + branđI,
+                    method: "GET"
+                }).done(data => {
+                    $("#pro_list div").remove()
+                    data.forEach(item => {
+                        $("#pro_list").append(createPro(item))
+                    })
+                })
+            }
+
+
+
+            $(document).on("click", ".btn_brand", (e) => {
+                e.preventDefault()
+                loadProduct_brand($(e.target).attr("data-brand-id"))
+            })
+
+            $(document).on("click", ".btn_cate", (e) => {
+                e.preventDefault()
+                loadProduct_cate($(e.target).attr("data-cate-id"))
+            })
+
+            $(".btn_pro_all").on("click", (e) => {
+                e.preventDefault()
+                loadProduct_all()
+            })
+
+            function createPro(item) {
+                let html = `
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                <div class="products-single fix">
+                                    <div class="box-img-hover">
+                                        <div class="type-lb">`
+                if (item.New) {
+                    html += `<p class="new">New</p>`
+                }
+                if (item.CurrentPrice < item.OldPrice) {
+                    let salePer = Math.round(100 - (item.CurrentPrice * 100 / item.OldPrice));
+                    html += `<p class="sale">Sale ${salePer}%</p>`
+                }
+                html += `</div>
+                                        <img src="/Uploads/${item.Product_Imgs[0].Name}" class="img-fluid" alt="${item.Name}" style="height:250px;object-fit:contain">
+                                        <div class="mask-icon">
+                                            <ul>
+                                                <li><a href="/Products/Details/${item.Id}" data-toggle="tooltip" data-placement="right" title="${item.Name}" data-original-title="View"><i class="fas fa-eye"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="why-text" style="height:80px">
+                                        <h4 style="height:40px">${item.Name}</h4>
+                                        <h5> ${numberWithDots(item.CurrentPrice)} VND</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                return html
+            }
+        })
+    </script>    
+    
+}
+
+
+
+

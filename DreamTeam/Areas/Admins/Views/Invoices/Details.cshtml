@@ -1,0 +1,118 @@
+﻿@model DreamTeam.ViewModels.Invoices_Index_Object
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Thông Tin Đơn Hàng</h3>
+    </div>
+
+    <div class="card card-primary m-2">
+        <div class="card-body">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Thông Tin</th>
+                        <th scope="col">Giá Trị</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td><label>Ngày Lập </label></td>
+                        <td>@Model.Invoice.CreateAt</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td><label>Trạng Thái Đơn Hàng </label></td>
+                        <td>@Html.DisplayFor(x => x.Invoice.InvoiceStatus.Name)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td><label>Trạng Thái Thanh Toán </label></td>
+                        <td>
+                            @if (Model.Invoice.IsPayed)
+                            {
+                                <span>Đã thanh toán</span>
+                            }
+                            else
+                            {
+                                <span>Chưa thanh toán</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td><label>Người Nhận Hàng</label></td>
+                        <td>@Html.DisplayFor(x => x.Invoice.Person)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td><label>Số Điện Thoại</label></td>
+                        <td>@Html.DisplayFor(x => x.Invoice.Phone)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td><label>Địa Chỉ</label></td>
+                        <td>@Html.DisplayFor(x => x.Invoice.Location)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">7</th>
+
+                        @{
+                            long sum = 0;
+                            foreach (var item in Model.InvoiceDetails)
+                            {
+                                sum += item.Price;
+                            }
+                            <td><label>Tổng Giá Trị Đơn Hàng</label></td>
+                            <td>@Convert.ToDecimal(sum).ToString("#,##") VND</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="card card-primary m-2">
+            <div class="card-header">
+                <h3 class="card-title">Danh Sách Sản Phẩm</h3>
+            </div>
+            <div class="card card-primary m-2">
+
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Mã Sản Phẩm</th>
+                                <th scope="col">Tên Sản Phẩm</th>
+                                <th scope="col">Avatar</th>
+                                <th scope="col">Số Lượng</th>
+                                <th scope="col">Đơn Giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.InvoiceDetails)
+                            {
+                                <tr>
+                                    <td>@item.ProductId</td>
+                                    <td>@item.Product.Name</td>
+                                    <td>
+                                        @if (@item.Product.Product_Imgs.FirstOrDefault() != null)
+                                        {
+                                            <img class="img-fluid" width="150px" src="~/Uploads/@item.Product.Product_Imgs.First().Name" />
+                                        }
+                                    </td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Price</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+    </div>
+</div>

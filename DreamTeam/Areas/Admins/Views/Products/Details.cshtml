@@ -264,6 +264,12 @@
                 if (data.Active[0] == "true") {
                     data.Active = true
                 }
+                if (data.Hot[0] == "true") {
+                    data.Hot = true
+                }
+                if (data.New[0] == "true") {
+                    data.New = true
+                }
                 putOne(tar.attr("data-product-id"),
                     data
                     , route_pro).done(() => {

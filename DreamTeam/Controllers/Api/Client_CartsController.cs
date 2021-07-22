@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DreamTeam.Models;
+using DreamTeam.Models.Account;
 using DreamTeam.Models.Product;
 using DreamTeam.Support;
 using Microsoft.AspNet.Identity;
@@ -26,6 +27,7 @@ namespace DreamTeam.Controllers.Api
             string userId = User.Identity.GetUserId();
             return db.Carts.OrderBy(x => x.Product.Ordering).Where(x => x.Product.Active == true && x.CustomerId == userId).Select(x=>new {
                 x.Product.Id,x.Product.Name,x.Product.Quantity,x.Product.OldPrice,x.Product.CurrentPrice,
+                CartCount = 1,
                 Avatar = x.Product.Product_Imgs.OrderBy(z => z.Ordering).Select(z => support.UPLOAD_FOLDER_NAME + "/" + z.Name).FirstOrDefault()
             });
         }
@@ -37,12 +39,16 @@ namespace DreamTeam.Controllers.Api
             try
             {
                 string userId = User.Identity.GetUserId();
+                if(db.Carts.Where(x=>x.CustomerId==userId && x.ProductId == id).FirstOrDefault()!=null)
+                {
+                    return Ok("Sản phẩm này đã có trong giỏ hàng!");
+                }
                 db.Carts.Add(new Models.Account.Cart { 
                     ProductId = id,
                     CustomerId = userId
                 });
                 db.SaveChanges();
-                return Ok("Đã lưu thay đổi!");
+                return Ok("Đã thêm vào giỏ hàng!");
             }
             catch (Exception)
             {
@@ -57,10 +63,7 @@ namespace DreamTeam.Controllers.Api
             try
             {
                 string userId = User.Identity.GetUserId();
-                db.Carts.Remove(new Models.Account.Cart {
-                    ProductId = id,
-                    CustomerId = userId
-                });
+                db.Carts.Remove(db.Carts.Where(x => x.CustomerId == userId && x.ProductId == id).FirstOrDefault());
                 db.SaveChanges();
                 return Ok("Đã lưu thay đổi!");
             }

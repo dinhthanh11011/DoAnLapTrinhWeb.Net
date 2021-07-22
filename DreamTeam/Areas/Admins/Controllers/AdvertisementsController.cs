@@ -12,7 +12,7 @@ using DreamTeam.Support;
 
 namespace DreamTeam.Areas.Admins.Controllers
 {
-  /*  [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]*/
+    [Authorize(Roles = support.STORE_MANAGE_PERMISSION)]
     public class AdvertisementsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

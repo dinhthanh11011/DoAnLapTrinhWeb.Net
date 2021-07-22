@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="cart-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-main table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb_list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-5">
+            <div class="col-lg-8 col-sm-12"></div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="order-box">
+                    <div id="client_bill">
+
+                    </div>
+
+                    <hr class="my-1">
+
+                    <div id="client_address" style="margin-bottom:10px;margin-top:10px">
+                        <h3>Địa Chỉ</h3>
+                        @Html.DropDownList("AddressId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex shopping-box"><a href="" class="ml-auto btn hvr-hover" id="btn_client_dathang">Đăt Hàng</a> </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            let route_Cart = "/api/Client_Carts/"
+            let route_Address = "/api/Client_Addresses/"
+            let route_Invoice = "/api/Client_Invoices/"
+            let list_cart_pro = []
+            loadCart()
+            loadAddress($("#AddressId").val())
+
+            function loadCart() {
+                $.ajax({
+                    url: route_Cart,
+                    method: "GET"
+                }).done(data => {
+                    list_cart_pro = data
+                    loadBill()
+                    $("#tb_list tr").remove()
+                    data.forEach(item => {
+                        $("#tb_list").append(createCart(item))
+                    })
+                })
+            }
+
+            function loadBill() {
+                $("#client_bill div").remove()
+                let sum = 0;
+                let count = 0;
+                list_cart_pro.forEach(item => {
+                    sum += item.CurrentPrice * item.CartCount
+                    count += parseInt(item.CartCount)
+                })
+                $("#client_bill").append(`
+                            <div><h3>Order</h3></div>
+                            <div class="d-flex">
+                                <h4>Số sản phẩm</h4>
+                                <div class="ml-auto font-weight-bold"> ${count} </div>
+                            </div>
+                            <div class="d-flex">
+                                <h4>Total Price</h4>
+                                <div class="ml-auto font-weight-bold"> ${numberWithDots(sum)} VND </div>
+                            </div>
+                        `)
+            }
+
+            function loadAddress(id) {
+                $.ajax({
+                    url: route_Address + id,
+                    method: "GET"
+                }).done(item => {
+                    $("#client_address div").remove()
+                    $("#client_address").append(`
+                            <div class="d-flex">
+                                <h4>Người nhận</h4>
+                                <div class="ml-auto font-weight-bold">${item.Person} </div>
+                            </div>
+                            <div class="d-flex">
+                                <h4>Số điện thoại</h4>
+                                <div class="ml-auto font-weight-bold">${item.Phone} </div>
+                            </div>
+                            <div class="d-flex">
+                                <h4>Địa Chỉ</h4>
+                                <div class="ml-auto font-weight-bold">${item.Location} </div>
+                            </div>
+                        `)
+                })
+            }
+
+            $(document).on("click", ".delete_cart", (e) => {
+                $.ajax({
+                    url: route_Cart + $(e.currentTarget).attr("data-pro-id"),
+                    method: "DELETE"
+                }).done(data => {
+                    loadCart()
+                    sendMessage("Đã xóa!", "done")
+                    loadBill()
+                }).fail(err => {
+                    sendMessage(err.responseJSON.Message)
+                })
+            })
+
+            $(document).on("change", "#AddressId", (e) => {
+                loadAddress($(e.target).val())
+            })
+
+
+
+            $(document).on("input", ".num_cart_pro", (e) => {
+                let tar = $(e.target)
+                if (tar.val() != "" && tar.val() != 0) {
+                    list_cart_pro.forEach(item => {
+                        if (item.Id == tar.attr("data-pro-id")) {
+                            item.CartCount = tar.val()
+                        }
+                    })
+                    loadBill()
+                }
+            })
+
+            $(document).on("click", "#btn_client_dathang", (e) => {
+                e.preventDefault()
+                if ($("#AddressId").val()) {
+                    let formdata = {
+                        AddressId: $("#AddressId").val(),
+                        InvoiceDetails: []
+                    }
+                    list_cart_pro.forEach(item => {
+                        formdata.InvoiceDetails.push({
+                            ProductId: item.Id,
+                            Quantity: item.CartCount
+                        })
+                    })
+                    console.log(formdata)
+                    $.ajax({
+                        url: route_Invoice,
+                        method: "POST",
+                        data: formdata
+                    }).done(() => {
+                        sendMessage("Đặt hàng thành công!", "done")
+                        window.location = "/"
+                    }).fail(err => {
+                        sendMessage(err.responseJSON.Message)
+                    })
+                } else {
+                    sendMessage("Vui lòng thêm địa chỉ để có thể đặt hàng!", "fail")
+                }
+            })
+
+
+
+
+            function createCart(item) {
+                let html = `
+                                                        <tr>
+                                                            <td class="thumbnail-img">
+                                                                <a href="#">
+                                                                    <img class="img-fluid" src="${item.Avatar}" alt="${item.Name}">
+                                                                </a>
+                                                            </td>
+                                                            <td class="name-pr">
+                                                                <a href="/Products/Details/${item.Id}">
+                                                                    ${item.Name}
+                                                                </a>
+                                                            </td>
+                                                            <td class="price-pr">
+                                                                <p>${numberWithDots(item.CurrentPrice)} VND</p>
+                                                            </td>
+                                                            <td class="quantity-box"><input type="number" size="4" value="${item.CartCount}" min="0" step="1" data-pro-id="${item.Id}" class="c-input-text qty text num_cart_pro"></td>
+                                                            <td class="remove-pr">
+                                                                <a class="delete_cart" data-pro-id="${item.Id}" href="#">
+                                                                    <i class="fas fa-times"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    `
+                return html;
+            }
+
+        })
+    </script>
+}

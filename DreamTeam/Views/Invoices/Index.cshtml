@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DreamTeam.Models.Store.Invoice>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-primary m-2">
+    <div class="card-header">
+        <h3 class="card-title">Danh Sách Đơn Hàng</h3>
+    </div>
+
+    <div class="card card-primary m-2">
+        <div class="card-body">
+            <div class="form-group my-2">
+                <label for="InvoiceStatusId">Lọc Theo Trạng Thái Đơn Hàng</label>
+                @Html.DropDownList("InvoiceStatusId", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="form-group my-2" id="tb_list">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            let route_invoice = "/api/Client_Invoices/"
+
+            loadInvoices()
+
+            function loadInvoices() {
+                $.ajax({
+                    url: route_invoice + $("#InvoiceStatusId").val(),
+                    method: "GET",
+                    async: false
+                }).done(data => {
+                    $("#tb_list table").remove()
+                    $("#tb_list").append(
+                        createTable(data,
+                            ["Họ Tên", "Thanh Toán", "Ngày Lập", "Trạng Thái"],
+                            [
+                                ["Customer", 1],
+                                ["IsPayed", 1],
+                                ["CreateAt", 1],
+                                ["InvoiceStatus", 1],
+                            ], false, true, false)
+                    )
+                })
+            }
+
+
+            $(document).on("change", "#InvoiceStatusId ", (e) => {
+                e.preventDefault();
+                loadInvoices()
+            });
+
+            $(document).on("click", ".btn_detail", (e) => {
+                window.location = window.location.href + "/Details/" + $(e.currentTarget).attr("value")
+            })
+        })
+    </script>
+}

@@ -16,9 +16,6 @@
     <!-- Start Main Top -->
     @RenderPage("ChildPageLayout/Nav.cshtml")
     <!-- End Start Main Top -->
-    <!-- Start Slider -->
-    @RenderPage("ChildPageLayout/Advertisement.cshtml")
-    <!-- End Slider -->
     
     <!-- Start Products  -->
     @RenderBody()
@@ -29,7 +26,11 @@
     
     @RenderPage("ChildPageLayout/Scripts.cshtml")
     @RenderSection("scripts", false)
-    
+    <script>
+        function numberWithDots(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+    </script>
 </body>
 
 </html>
