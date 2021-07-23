@@ -214,6 +214,7 @@
     <Compile Include="Controllers\Api\Client_CommentsController.cs" />
     <Compile Include="Controllers\Api\Client_InvoicesController.cs" />
     <Compile Include="Controllers\Api\Client_LogosController.cs" />
+    <Compile Include="Controllers\Api\Client_ProductAttributesController.cs" />
     <Compile Include="Controllers\Api\Client_ProductsController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

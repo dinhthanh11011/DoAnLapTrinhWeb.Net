@@ -27,6 +27,11 @@ namespace DreamTeam.Controllers.Api
                 return Handle.Product_Handle.getBySearch(searchKey);
         }
 
+        public dynamic GetProducts(int id)
+        {
+            return Handle.Product_Handle.getOne(id);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

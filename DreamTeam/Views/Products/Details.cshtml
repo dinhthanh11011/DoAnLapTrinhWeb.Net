@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-xl-5 col-lg-5 col-md-6">
                 <div id="carousel-example-1" class="single-product-slider carousel slide" data-ride="carousel">
-                    <div class="carousel-inner" role="listbox" >
+                    <div class="carousel-inner" role="listbox" style="height:400px">
                         @foreach (var item in Model.Product_Imgs)
                         {
                             var ac = "";
@@ -85,11 +85,6 @@
                                         <td>Loại Sản Phẩm</td>
                                         <td>@Model.Category.Name</td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Số Lượng</td>
-                                        <td>@Model.Quantity</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -104,24 +99,24 @@
 {
     <script>
         $(document).ready(() => {
-            let route_pro_attr = "/api/Client_Products/"
+            let route_pro_attr = "/api/Client_ProductAttributes/"
             let route_cart = "/api/Client_Carts/"
 
             $.ajax({
                 url: route_pro_attr + $("#tb_list").attr("data-product-id"),
                 method: "GET"
             }).done(data => {
-                if (data.Attributes.length > 0) {
+                if (data.length > 0) {
                     loadAttrs(data)
                 }
             })
 
 
             function loadAttrs(data) {
-                data.Attributes.forEach((item, index) => {
+                data.forEach((item, index) => {
                     $("#tb_list").append(`
                                     <tr>
-                                        <th scope="row">${index + 4}</th>
+                                        <th scope="row">${index + 3}</th>
                                         <td>${item.Name}</td>
                                         <td>${item.Value}</td>
                                     </tr>

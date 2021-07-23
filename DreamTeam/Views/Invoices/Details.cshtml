@@ -99,11 +99,11 @@
                         {
                             <tr>
                                 <td>@item.ProductId</td>
-                                <td>@item.Product.Name</td>
+                                <td><a href="/Products/Details/@item.ProductId">@item.Product.Name</a></td>
                                 <td>
                                     @if (@item.Product.Product_Imgs.FirstOrDefault() != null)
                                     {
-                                        <img class="img-fluid" width="150px" src="~/Uploads/@item.Product.Product_Imgs.First().Name" />
+                                    <a href="/Products/Details/@item.ProductId"><img class="img-fluid" width="150" src="~/Uploads/@item.Product.Product_Imgs.First().Name" /></a>
                                     }
                                 </td>
                                 <td>@item.Quantity</td>

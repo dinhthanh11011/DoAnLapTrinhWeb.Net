@@ -131,7 +131,7 @@
                     $("#Client_brands").append(`<button class="active" data-filter="*" > All</button>`)
                     data.forEach(item => {
                         $("#Client_brands").append(`
-                                            <button data-filter=".${item.Name}">${item.Name}</button>
+                                            <button data-filter=".${item.Name}"> <img class="img-fluid" style="height:30px;" src="/Uploads/${item.Logo}" alt="${item.Name}" /></button>
                                         `)
                     })
 

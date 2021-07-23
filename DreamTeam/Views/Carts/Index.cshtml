@@ -168,7 +168,7 @@
                         data: formdata
                     }).done(() => {
                         sendMessage("Đặt hàng thành công!", "done")
-                        window.location = "/"
+                        window.location = "/Invoices"
                     }).fail(err => {
                         sendMessage(err.responseJSON.Message)
                     })
@@ -184,7 +184,7 @@
                 let html = `
                                                         <tr>
                                                             <td class="thumbnail-img">
-                                                                <a href="#">
+                                                                <a href="/Products/Details/${item.Id}">
                                                                     <img class="img-fluid" src="${item.Avatar}" alt="${item.Name}">
                                                                 </a>
                                                             </td>

@@ -62,23 +62,26 @@ namespace DreamTeam.Controllers.Api
         {
             try
             {
+                var add = db.Addresses.Find(req.AddressId);
+                if (add == null)
+                {
+                    return BadRequest("Địa Chỉ Không Hợp Lệ!");
+                }
+
                 var userId = User.Identity.GetUserId();
                 req.Invoice = new Invoice();
                 req.Invoice.CreateAt = DateTime.Now;
                 req.Invoice.CustomerId = User.Identity.GetUserId();
                 req.Invoice.InvoiceStatusId = db.InvoiceStatuses.Where(x => x.isDefault).First().Id;
 
-                var add = db.Addresses.Find(req.AddressId);
-                if (add == null)
-                {
-                    return BadRequest("Địa Chỉ Không Hợp Lệ!");
-                }
                 req.Invoice.Person = add.Person;
                 req.Invoice.Phone = add.Phone;
                 req.Invoice.Location = add.Location;
                 foreach (var item in req.InvoiceDetails)
                 {
-                    item.Price = db.Products.Find(item.ProductId).CurrentPrice;
+                    var pro = db.Products.Find(item.ProductId);
+                    pro.Quantity -= item.Quantity;
+                    item.Price = pro.CurrentPrice;
                     db.Carts.Remove(db.Carts.Where(x => x.CustomerId == userId && x.ProductId == item.ProductId).First());
                 }
                 req.Invoice.InvoiceDetails = req.InvoiceDetails;
@@ -101,6 +104,10 @@ namespace DreamTeam.Controllers.Api
                 var ob = db.Invoices.Include(x => x.InvoiceDetails).Where(x => x.Id == id).FirstOrDefault();
                 if (ob.InvoiceStatusId != db.InvoiceStatuses.Where(x => x.isDefault).FirstOrDefault().Id)
                     return BadRequest("Đơn hàng này hiện không thể hủy!");
+                foreach (var item in ob.InvoiceDetails)
+                {
+                    db.Products.Find(item.ProductId).Quantity += item.Quantity;
+                }
                 db.InvoiceDetails.RemoveRange(db.InvoiceDetails.Where(x => x.InvoiceId == ob.Id).ToList());
                 db.Invoices.Remove(ob);
                 db.SaveChanges();

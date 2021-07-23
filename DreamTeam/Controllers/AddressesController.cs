@@ -76,6 +76,7 @@ namespace DreamTeam.Controllers
         {
             if (ModelState.IsValid)
             {
+                address.UserId = User.Identity.GetUserId();
                 db.Entry(address).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
