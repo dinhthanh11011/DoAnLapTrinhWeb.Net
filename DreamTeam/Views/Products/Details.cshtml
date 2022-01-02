@@ -18,7 +18,7 @@
                             {
                                 ac = "active";
                             }
-                            <div class="carousel-item @ac"> <img class="d-block img-fluid" src="/Uploads/@item.Name" alt="@Model.Name"> </div>
+                            <div class="carousel-item @ac"> <img class="d-block img-fluid" style="object-fit:contain" src="/Uploads/@item.Name" alt="@Model.Name"> </div>
                         }
                     </div>
                     <a class="carousel-control-prev" href="#carousel-example-1" role="button" data-slide="prev">
@@ -33,7 +33,7 @@
                         @foreach (var item in Model.Product_Imgs)
                         {
                             <li data-target="#carousel-example-1" data-slide-to="@item.Ordering-1" class="">
-                                <img class="d-block img-fluid" src="/Uploads/@item.Name" alt="@Model.Name">
+                                <img class="d-block img-fluid" style="object-fit:contain" src="/Uploads/@item.Name" alt="@Model.Name">
                             </li>
                         }
                     </ol>

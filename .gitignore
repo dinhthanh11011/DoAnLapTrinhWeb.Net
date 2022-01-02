@@ -1,1 +1,4 @@
-packages
+/packages
+/DreamTeam/bin
+/DreamTeam/obj
+/.vs

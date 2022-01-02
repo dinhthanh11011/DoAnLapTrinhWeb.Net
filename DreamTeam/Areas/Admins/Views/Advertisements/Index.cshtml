@@ -53,7 +53,7 @@
     $(document).ready(() => {
 
         let route = "api/Admin_Advertisements/"
-        loadPro_Imgs()
+        loadAdvertisements()
 
 
         $("#form_imgs_post").on("submit", (e) => {
@@ -65,23 +65,24 @@
                 processData: false,
                 contentType: false,
             }).done((data) => {
-                loadPro_Imgs()
+                loadAdvertisements()
                 sendMessage("Đã thêm mới thành công!", "done")
             })
                 .fail((err) => {
+                    console.log(err)
                     sendMessage(err.responseJSON.Message, "fail")
                 })
         })
 
 
-        function loadPro_Imgs() {
+        function loadAdvertisements() {
             $.ajax({
                 url: route,
-                method: "GET",
+                method: "GET"
             }).done(data => {
                 $("#form_imgs table").remove()
                 data.forEach((item) => {
-                    item.Image = `<img width=100px class="image m-auto" src="${item.Image}" alt="${item.Image}" />`
+                    item.Image = `<img width=100px class="image m-auto" style="object-fit: contain;" src="${item.Image}" alt="${item.Image}" />`
                 })
                 $("#form_imgs").append(
                     createTable(
@@ -97,7 +98,8 @@
                 )
 
             })
-                .fail(() => {
+                .fail((err) => {
+                    console.log(err)
                     sendMessage("Lấy dữ liệu thất bại!", "fail")
                 })
         }
@@ -110,7 +112,7 @@
                 method: "DELETE"
             }).done(() => {
                 sendMessage("Đã lưu thay đổi!", "done")
-                loadPro_Imgs()
+                loadAdvertisements()
             }).fail(() => {
                 sendMessage("Vui lòng thử lại sau!", "fail")
             })
@@ -123,7 +125,7 @@
                 Ordering: $(`.Ordering.${tar.attr("value")}`).val(),
             }, route).done(() => {
                 sendMessage("Đã lưu thay đổi!", "done")
-                loadPro_Imgs()
+                loadAdvertisements()
             }).fail((err) => {
                 sendMessage(err.responseJSON.Message, "fail")
             })

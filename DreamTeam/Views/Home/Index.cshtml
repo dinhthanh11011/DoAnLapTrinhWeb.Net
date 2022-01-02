@@ -4,7 +4,7 @@
         @foreach (var item in Model.Advertisements)
         {
             <li class="text-center">
-                <img src="/Uploads/@item.Image" alt="@item.Title" style="object-fit: cover;">
+                <img src="/Uploads/@item.Image" alt="@item.Title" style="object-fit: contain;">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
@@ -112,7 +112,7 @@
                         $("#Client_Categories").append(`
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                 <div class="shop-cat-box">
-                                    <img class="img-fluid" style="height:200px;" src="/Uploads/${item.Avatar}" alt="${item.Name}" />
+                                    <img class="img-fluid" style="height:200px;object-fit: contain" src="/Uploads/${item.Avatar}" alt="${item.Name}" />
                                     <a class="btn hvr-hover" href="/Products">${item.Name} ${item.Brand.Name}</a>
                                 </div>
                             </div>
@@ -131,8 +131,8 @@
                     $("#Client_brands").append(`<button class="active" data-filter="*" > All</button>`)
                     data.forEach(item => {
                         $("#Client_brands").append(`
-                                            <button data-filter=".${item.Name}"> <img class="img-fluid" style="height:30px;" src="/Uploads/${item.Logo}" alt="${item.Name}" /></button>
-                                        `)
+                            <button data-filter=".${item.Name}"> <img class="img-fluid" style="height:30px;object-fit: contain" src="/Uploads/${item.Logo}" alt="${item.Name}" /></button>
+                        `)
                     })
 
                 })

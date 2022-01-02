@@ -21,14 +21,14 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Admin_Advertisements
-        public dynamic GetAdvertisements()
+        public IHttpActionResult GetAdvertisements()
         {
             var data = db.Advertisements.OrderBy(x=>x.Ordering).ToList();
             foreach (var item in data)
             {
                 item.Image = support.UPLOAD_FOLDER_NAME + "/" + item.Image;
             }
-            return data;
+            return Ok(data);
         }
 
         // PUT: api/Admin_Advertisements/5
@@ -104,8 +104,10 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                 if (files != null)
                 {
                     var title = HttpContext.Current.Request.Form.Get("Title");
-                    var link = HttpContext.Current.Request.Form.Get("Link");
-                    var des = HttpContext.Current.Request.Form.Get("Description");
+                    var data_link = HttpContext.Current.Request.Form.Get("Link");
+                    var link = data_link != null ? data_link : "/";
+                    var data_des = HttpContext.Current.Request.Form.Get("Description");
+                    var des = data_des != null ? data_des : "";
                     for (int i = 0; i < files.Count; i++)
                     {
                         var item = files[i];
@@ -124,7 +126,7 @@ namespace DreamTeam.Areas.Admins.Controllers.Api
                     }
                     return Ok("Đã thêm mới thành công!");
                 }
-                return BadRequest("Không tin thấy File Upload!");
+                return BadRequest("Không tìm thấy File Upload!");
             }
             catch (Exception)
             {
