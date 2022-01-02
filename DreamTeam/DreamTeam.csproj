@@ -232,10 +232,6 @@
     <Compile Include="Migrations\202107221532344_CreateDatabase.Designer.cs">
       <DependentUpon>202107221532344_CreateDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202107221534077_InsertBaseData.cs" />
-    <Compile Include="Migrations\202107221534077_InsertBaseData.Designer.cs">
-      <DependentUpon>202107221534077_InsertBaseData.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Account\Address.cs" />
@@ -2422,9 +2418,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202107221532344_CreateDatabase.resx">
       <DependentUpon>202107221532344_CreateDatabase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202107221534077_InsertBaseData.resx">
-      <DependentUpon>202107221534077_InsertBaseData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
